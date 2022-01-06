@@ -15,7 +15,7 @@ class FeedFeatureLoaderTests: XCTestCase {
         XCTAssertNil(client.requestedUrl)
     }
 
-    func test_init_requestDataFromUrl() {
+    func test_load_requestsDataFromUrl() {
         let url = URL(string: "https://a-given-url.com")!
         let (sut, client) = makeSUT(url: url)
 
