@@ -56,16 +56,18 @@ class FeedFeatureLoaderTests: XCTestCase {
     }
 
     private class HTTPClientSpy: HTTPClient {
-        var requestedUrls = [URL]()
-        var completions: [(Error) -> Void] = []
+        var messages = [(url: URL, completion: (Error) -> Void)]()
+
+        var requestedUrls: [URL] {
+            messages.map { $0.url }
+        }
 
         func get(from url: URL, completion: @escaping (Error) -> Void) {
-            requestedUrls.append(url)
-            completions.append(completion)
+            messages.append((url, completion))
         }
 
         func complete(with error: Error, at index: Int = 0) {
-            completions[index](error)
+            messages[index].completion(error)
         }
     }
 }
