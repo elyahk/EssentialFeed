@@ -12,7 +12,7 @@ class FeedFeatureLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl() {
         let (_, client) = makeSUT()
 
-        XCTAssertNil(client.requestedUrl)
+        XCTAssertTrue(client.requestedUrls.isEmpty)
     }
 
     func test_load_requestsDataFromUrl() {
@@ -21,7 +21,7 @@ class FeedFeatureLoaderTests: XCTestCase {
 
         sut.load()
 
-        XCTAssertEqual(client.requestedUrl, url)
+        XCTAssertEqual(client.requestedUrls, [url])
     }
 
     func test_loadTwice_requestsDataFromUrlTwice() {
@@ -43,11 +43,9 @@ class FeedFeatureLoaderTests: XCTestCase {
     }
 
     private class HTTPClientSpy: HTTPClient {
-        var requestedUrl: URL?
         var requestedUrls = [URL]()
 
         func get(from url: URL) {
-            requestedUrl = url
             requestedUrls.append(url)
         }
 
