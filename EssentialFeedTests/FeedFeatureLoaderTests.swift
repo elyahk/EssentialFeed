@@ -20,14 +20,14 @@ class FeedFeatureLoader {
     }
 }
 
-class HTTPClient {
-    func get(from url: URL) {}
+protocol HTTPClient {
+    func get(from url: URL)
 }
 
 class HTTPClientSpy: HTTPClient {
     var requestedUrl: URL?
 
-    override func get(from url: URL) {
+    func get(from url: URL) {
         requestedUrl = url
     }
 
@@ -36,7 +36,7 @@ class HTTPClientSpy: HTTPClient {
 class FeedFeatureLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl() {
         let client = HTTPClientSpy()
-        let sut = FeedFeatureLoader(client: client)
+        let _ = FeedFeatureLoader(client: client)
 
         XCTAssertNil(client.requestedUrl)
     }
