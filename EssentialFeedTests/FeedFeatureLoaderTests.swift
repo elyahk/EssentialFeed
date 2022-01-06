@@ -9,15 +9,18 @@ import Foundation
 import XCTest
 
 class FeedFeatureLoader {
+    private var client: HTTPClient
+
+    init(client: HTTPClient) {
+        self.client = client
+    }
 
     func load() {
-        HTTPClient.shared.get(from: URL(string: "https://a-url.com")!)
+       client.get(from: URL(string: "https://a-url.com")!)
     }
 }
 
 class HTTPClient {
-    static var shared: HTTPClient = HTTPClient()
-
     func get(from url: URL) {}
 }
 
@@ -33,16 +36,14 @@ class HTTPClientSpy: HTTPClient {
 class FeedFeatureLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromUrl() {
         let client = HTTPClientSpy()
-        let sut = FeedFeatureLoader()
-        HTTPClient.shared = client
+        let sut = FeedFeatureLoader(client: client)
 
         XCTAssertNil(client.requestedUrl)
     }
 
     func test_init_requestDataFromUrl() {
         let client = HTTPClientSpy()
-        let sut = FeedFeatureLoader()
-        HTTPClient.shared = client
+        let sut = FeedFeatureLoader(client: client)
 
         sut.load()
 
