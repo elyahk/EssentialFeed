@@ -70,7 +70,7 @@ class FeedFeatureLoaderTests: XCTestCase {
         let (sut, client) = makeSUT()
 
         expect(sut, toCompleteWith: .success([]), when: {
-            let emptyJSON = Data("{\"items\": [] }".utf8)
+            let emptyJSON = makeItemsJSON(items: [])
             client.complete(withStatusCode: 200, data: emptyJSON)
         })
     }
@@ -78,34 +78,18 @@ class FeedFeatureLoaderTests: XCTestCase {
     func test_load_deliversItemsOn200HTTPResponseWithValidJSONList() {
         let (sut, client) = makeSUT()
 
-        let item1 = FeedItem(
+        let item1 = makeItem(
             id: UUID(),
-            description: nil,
-            location: nil,
-            imageUrl: URL(string: "https://a-url.com")!)
+            imageURL: URL(string: "https://a-url.com")!)
 
-        let item1Json = [
-            "id": item1.id.uuidString,
-            "image": item1.imageUrl.absoluteString
-        ]
-
-        let item2 = FeedItem(
+        let item2 = makeItem(
             id: UUID(),
             description: "a description",
             location: "a location",
-            imageUrl: URL(string: "https://another-url.com")!)
+            imageURL: URL(string: "https://another-url.com")!)
 
-        let item2Json = [
-            "id": item2.id.uuidString,
-            "description": item2.description,
-            "location": item2.location,
-            "image": item2.imageUrl.absoluteString
-        ]
-
-        let itemsJSON = [ "items": [item1Json, item2Json]]
-
-        expect(sut, toCompleteWith: .success([item1, item2]), when: {
-            let json = try! JSONSerialization.data(withJSONObject: itemsJSON)
+        expect(sut, toCompleteWith: .success([item1.model, item2.model]), when: {
+            let json = makeItemsJSON(items: [item1.json, item2.json])
             client.complete(withStatusCode: 200, data: json)
         })
     }
@@ -116,6 +100,23 @@ class FeedFeatureLoaderTests: XCTestCase {
         let client = HTTPClientSpy()
         let sut = RemoteFeedLoader(url: url, client: client)
         return (sut, client)
+    }
+
+    private func makeItem(id: UUID, description: String? = nil, location: String? = nil, imageURL: URL) -> (model: FeedItem, json: [String: Any]) {
+        let item = FeedItem(id: id, description: description, location: location, imageUrl: imageURL)
+
+        let json = [
+            "id": id.uuidString,
+            "description": description,
+            "location": location,
+            "image": imageURL.absoluteString
+        ].compactMapValues { $0 }
+
+        return (item, json)
+    }
+
+    private func makeItemsJSON(items: [[String: Any]]) -> Data {
+        return try! JSONSerialization.data(withJSONObject: [ "items": items])
     }
 
     private func expect(_ sut: RemoteFeedLoader, toCompleteWith result: RemoteFeedLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
