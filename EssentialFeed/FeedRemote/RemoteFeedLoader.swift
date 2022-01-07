@@ -57,22 +57,21 @@ private class FeedItemMapper {
         guard response.statusCode == 200 else { throw RemoteFeedLoader.Error.invalidData }
         return try JSONDecoder().decode(Root.self, from: data).items.map { $0.feedItem }
     }
-}
 
-private struct Root: Decodable {
-    var items: [Item]
-}
+    private struct Root: Decodable {
+        var items: [Item]
+    }
 
-private struct Item: Decodable {
-    let id: UUID
-    let description: String?
-    let location: String?
-    let image: URL
+    private struct Item: Decodable {
+        let id: UUID
+        let description: String?
+        let location: String?
+        let image: URL
 
-    var feedItem: FeedItem {
-        FeedItem(id: id, description: description, location: location, imageUrl: image)
+        var feedItem: FeedItem {
+            FeedItem(id: id, description: description, location: location, imageUrl: image)
+        }
     }
 }
-
 
 
