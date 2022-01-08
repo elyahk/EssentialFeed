@@ -8,15 +8,12 @@
 import Foundation
 
 internal final class FeedItemMapper {
-    private static var OK_200: Int { return 200 }
-
-    internal static func map(_ data: Data, _ response: HTTPURLResponse) throws -> [FeedItem] {
-        guard response.statusCode == OK_200 else { throw RemoteFeedLoader.Error.invalidData }
-        return try JSONDecoder().decode(Root.self, from: data).items.map { $0.feedItem }
-    }
-
     private struct Root: Decodable {
         var items: [Item]
+
+        var feedItems: [FeedItem] {
+            return items.map { $0.feedItem }
+        }
     }
 
     private struct Item: Decodable {
@@ -28,5 +25,16 @@ internal final class FeedItemMapper {
         var feedItem: FeedItem {
             FeedItem(id: id, description: description, location: location, imageUrl: image)
         }
+    }
+
+    private static var OK_200: Int { return 200 }
+
+    internal static func map(data: Data, response: HTTPURLResponse) -> RemoteFeedLoader.Result {
+        guard response.statusCode == OK_200,
+              let root = try? JSONDecoder().decode(Root.self, from: data) else {
+            return .failure(RemoteFeedLoader.Error.invalidData)
+        }
+
+        return .success(root.feedItems)
     }
 }
