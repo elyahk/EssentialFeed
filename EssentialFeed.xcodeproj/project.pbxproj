@@ -96,7 +96,7 @@
 		2CA46E3B27860DE800B3D776 /* EssentialFeedTests */ = {
 			isa = PBXGroup;
 			children = (
-				2C0F075B2786F6A100DA9C31 /* FeedFeatureLoaderTests.swift */,
+				2CCC163B2789549200411E7A /* Feed Api */,
 			);
 			path = EssentialFeedTests;
 			sourceTree = "<group>";
@@ -108,6 +108,14 @@
 				2CA46E4927860E7300B3D776 /* FeedLoader.swift */,
 			);
 			path = "Feed Feature";
+			sourceTree = "<group>";
+		};
+		2CCC163B2789549200411E7A /* Feed Api */ = {
+			isa = PBXGroup;
+			children = (
+				2C0F075B2786F6A100DA9C31 /* FeedFeatureLoaderTests.swift */,
+			);
+			path = "Feed Api";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
