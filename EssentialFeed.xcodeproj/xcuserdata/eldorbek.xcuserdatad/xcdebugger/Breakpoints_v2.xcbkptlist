@@ -30,8 +30,8 @@
             filePath = "EssentialFeedTests/Feed Api/URLSessionHTTPClientTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "test_getFromURL_failsOnRequestError()"
             landmarkType = "7">
          </BreakpointContent>
