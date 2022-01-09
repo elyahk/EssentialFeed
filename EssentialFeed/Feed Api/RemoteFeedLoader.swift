@@ -10,7 +10,7 @@ import Foundation
 final public class RemoteFeedLoader {
     private var url: URL
     private var client: HTTPClient
-
+ 
     public enum Error: Swift.Error {
         case connectivity
         case invalidData
