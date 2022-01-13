@@ -1,7 +1,0 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-os: osx
-osx_image: xcode13.1
-language: swift
-script: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
