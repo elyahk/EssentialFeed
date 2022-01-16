@@ -21,6 +21,7 @@ final public class RemoteFeedLoader {
     public init(url: URL, client: HTTPClient) {
         self.url = url
         self.client = client
+        
     }
 
     public func load(completion: @escaping (Result) -> Void) {
