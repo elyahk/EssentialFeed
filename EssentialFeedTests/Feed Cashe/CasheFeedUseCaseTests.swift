@@ -16,7 +16,7 @@ class FeedStore {
         deleteCashedFeedCallCount += 1
     }
 
-    func completeWithDeletionError(_ error: Error) {
+    func completeDeletion(with error: Error) {
 
     }
 }
@@ -54,7 +54,7 @@ class CasheFeedUseCaseTests: XCTestCase {
         let anyError = anyNSError()
 
         sut.save(items)
-        feedStore.completeWithDeletionError(anyError)
+        feedStore.completeDeletion(with: anyError)
 
         XCTAssertEqual(feedStore.saveCashedFeedCallCount, 0)
     }
