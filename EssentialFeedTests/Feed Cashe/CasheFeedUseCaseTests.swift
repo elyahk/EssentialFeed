@@ -10,9 +10,14 @@ import EssentialFeed
 
 class FeedStore {
     var deleteCashedFeedCallCount: Int = 0
+    var saveCashedFeedCallCount: Int = 0
 
     func deleteCashedFeed() {
         deleteCashedFeedCallCount += 1
+    }
+
+    func completeWithDeletionError(_ error: Error) {
+
     }
 }
 
@@ -43,6 +48,17 @@ class CasheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(feedStore.deleteCashedFeedCallCount, 1)
     }
 
+    func test_save_doesNotSaveCasheUponDeletionError() {
+        let (sut, feedStore) = makeSUT()
+        let items = [uniqueItem(), uniqueItem()]
+        let anyError = anyNSError()
+
+        sut.save(items)
+        feedStore.completeWithDeletionError(anyError)
+
+        XCTAssertEqual(feedStore.saveCashedFeedCallCount, 0)
+    }
+
     // MARK: - Helpers
 
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalFeedLoader, FeedStore) {
@@ -61,5 +77,9 @@ class CasheFeedUseCaseTests: XCTestCase {
 
     private func anyURL() -> URL {
         return URL(string: "https://a-url.com")!
+    }
+
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any error", code: 0)
     }
 }
