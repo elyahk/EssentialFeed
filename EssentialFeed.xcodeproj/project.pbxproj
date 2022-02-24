@@ -144,7 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				2C263AED27C7303B00514247 /* Feed Cashe */,
-				2CBFA8A3278B2DC1008CFDEB /* Extension */,
+				2CBFA8A3278B2DC1008CFDEB /* Helpers */,
 				2CCC163B2789549200411E7A /* Feed Api */,
 			);
 			path = EssentialFeedTests;
@@ -159,12 +159,12 @@
 			path = "Feed Feature";
 			sourceTree = "<group>";
 		};
-		2CBFA8A3278B2DC1008CFDEB /* Extension */ = {
+		2CBFA8A3278B2DC1008CFDEB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				2CBFA8A4278B2DD1008CFDEB /* XCTestCase + TrackMemory.swift */,
 			);
-			path = Extension;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		2CCC163B2789549200411E7A /* Feed Api */ = {

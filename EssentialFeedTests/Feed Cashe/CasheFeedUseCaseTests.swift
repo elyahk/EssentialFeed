@@ -51,7 +51,7 @@ class CasheFeedUseCaseTests: XCTestCase {
 
         return (sut, feedStore)
     }
-
+ 
     private func uniqueItem() -> FeedItem {
         FeedItem(id: UUID(), description: "any", location: "any", imageUrl: anyURL())
     }
