@@ -28,7 +28,7 @@ class FeedStore {
         deletionCompletions[index](nil)
     }
 
-    func save(_ items: [FeedItem]) {
+    func insert(_ items: [FeedItem]) {
         saveCashedFeedCallCount += 1
     }
 }
@@ -43,7 +43,7 @@ class LocalFeedLoader {
     func save(_ items: [FeedItem]) {
         feedStore.deleteCashedFeed { [unowned self] error in
             if error == nil {
-                self.feedStore.save(items)
+                self.feedStore.insert(items)
             }
         }
     }
