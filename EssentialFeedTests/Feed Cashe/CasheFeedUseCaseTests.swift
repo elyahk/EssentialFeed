@@ -8,12 +8,32 @@
 import XCTest
 import EssentialFeed
 
+
+class LocalFeedLoader {
+    private var feedStore: FeedStore
+    private var currentTimestamp: () -> Date
+
+    init(feedStore: FeedStore, currentTimestamp: @escaping () -> Date) {
+        self.feedStore = feedStore
+        self.currentTimestamp = currentTimestamp
+    }
+
+    func save(_ items: [FeedItem]) {
+        feedStore.deleteCashedFeed { [unowned self] error in
+            if error == nil {
+                self.feedStore.insert(items, timestamp: currentTimestamp())
+            }
+        }
+    }
+}
+
 class FeedStore {
     typealias DeletionCompletion = (Error?) -> Void
 
     var deleteCashedFeedCallCount: Int = 0
     var saveCashedFeedCallCount: Int = 0
     var deletionCompletions: [DeletionCompletion] = []
+    var insertions = [(items: [FeedItem], timestamp: Date)]()
 
     func deleteCashedFeed(completion: @escaping DeletionCompletion) {
         deleteCashedFeedCallCount += 1
@@ -28,24 +48,9 @@ class FeedStore {
         deletionCompletions[index](nil)
     }
 
-    func insert(_ items: [FeedItem]) {
+    func insert(_ items: [FeedItem], timestamp: Date) {
         saveCashedFeedCallCount += 1
-    }
-}
-
-class LocalFeedLoader {
-    private var feedStore: FeedStore
-
-    init(feedStore: FeedStore) {
-        self.feedStore = feedStore
-    }
-
-    func save(_ items: [FeedItem]) {
-        feedStore.deleteCashedFeed { [unowned self] error in
-            if error == nil {
-                self.feedStore.insert(items)
-            }
-        }
+        insertions.append((items, timestamp))
     }
 }
 
@@ -85,11 +90,24 @@ class CasheFeedUseCaseTests: XCTestCase {
         XCTAssertEqual(feedStore.saveCashedFeedCallCount, 1)
     }
 
+    func test_save_saveCasheWithTimeStampUponDeletionSuccessfully() {
+        let timestamp = Date()
+        let (sut, feedStore) = makeSUT(currentTimestamp: { timestamp } )
+        let items = [uniqueItem(), uniqueItem()]
+
+        sut.save(items)
+        feedStore.completeDeletionSuccessfully()
+
+        XCTAssertEqual(feedStore.insertions.count, 1)
+        XCTAssertEqual(feedStore.insertions.first?.items, items)
+        XCTAssertEqual(feedStore.insertions.first?.timestamp, timestamp)
+    }
+
     // MARK: - Helpers
 
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalFeedLoader, FeedStore) {
+    private func makeSUT(currentTimestamp: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (LocalFeedLoader, FeedStore) {
         let feedStore = FeedStore()
-        let sut = LocalFeedLoader(feedStore: feedStore)
+        let sut = LocalFeedLoader(feedStore: feedStore, currentTimestamp: currentTimestamp)
 
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(feedStore, file: file, line: line)
