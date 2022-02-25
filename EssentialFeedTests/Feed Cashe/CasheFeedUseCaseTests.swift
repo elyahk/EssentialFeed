@@ -147,7 +147,6 @@ class CasheFeedUseCaseTests: XCTestCase {
     func test_save_succedsOnSuccessfulCasheInsertion() {
         let (sut, feedStore) = makeSUT()
         let items = [uniqueItem(), uniqueItem()]
-        let anyError = anyNSError()
 
         let exp = expectation(description: "Wait for completion")
         var recivedError: Error?
