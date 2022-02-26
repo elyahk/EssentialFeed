@@ -19,21 +19,21 @@ class LocalFeedLoader {
     }
 
     func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void) {
-        feedStore.deleteCashedFeed { [weak self] error in
+        feedStore.deleteCashedFeed { [weak self] deletionError in
             guard let self = self else { return }
 
-            if error == nil {
-                self.cashe(items, timeStamp: self.currentTimestamp(), completion: completion)
+            if let deletionError = deletionError {
+                completion(deletionError)
             } else {
-                completion(error)
+                self.cashe(items, timeStamp: self.currentTimestamp(), completion: completion)
             }
         }
     }
 
     private func cashe(_ items: [FeedItem], timeStamp: Date, completion: @escaping (Error?) -> Void) {
-        feedStore.insert(items, timestamp: timeStamp) { [weak self] error in
+        feedStore.insert(items, timestamp: timeStamp) { [weak self] insertionError in
             guard self != nil else { return }
-            completion(error)
+            completion(insertionError)
         }
     }
 }
