@@ -77,7 +77,7 @@ class CasheFeedUseCaseTests: XCTestCase {
         let store = FeedStoreSpy()
         var sut: LocalFeedLoader? = LocalFeedLoader(feedStore: store, currentTimestamp: Date.init)
 
-        var recieveResults: [Error?] = []
+        var recieveResults: [LocalFeedLoader.SaveResult] = []
         sut?.save([uniqueItem(), uniqueItem()]) { recieveResults.append($0) }
         sut = nil
 
