@@ -8,44 +8,6 @@
 import XCTest
 import EssentialFeed
 
-
-class LocalFeedLoader {
-    private var feedStore: FeedStore
-    private var currentTimestamp: () -> Date
-
-    init(feedStore: FeedStore, currentTimestamp: @escaping () -> Date) {
-        self.feedStore = feedStore
-        self.currentTimestamp = currentTimestamp
-    }
-
-    func save(_ items: [FeedItem], completion: @escaping (Error?) -> Void) {
-        feedStore.deleteCashedFeed { [weak self] deletionError in
-            guard let self = self else { return }
-
-            if let deletionError = deletionError {
-                completion(deletionError)
-            } else {
-                self.cashe(items, timeStamp: self.currentTimestamp(), completion: completion)
-            }
-        }
-    }
-
-    private func cashe(_ items: [FeedItem], timeStamp: Date, completion: @escaping (Error?) -> Void) {
-        feedStore.insert(items, timestamp: timeStamp) { [weak self] insertionError in
-            guard self != nil else { return }
-            completion(insertionError)
-        }
-    }
-}
-
-protocol FeedStore {
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-
-    func deleteCashedFeed(completion: @escaping DeletionCompletion)
-    func insert(_ items: [FeedItem], timestamp: Date, completion: @escaping InsertionCompletion)
-}
-
 class CasheFeedUseCaseTests: XCTestCase {
     func test_init_doesNotDeleteCasheUponCreation() {
         let (_, feedStore) = makeSUT()
