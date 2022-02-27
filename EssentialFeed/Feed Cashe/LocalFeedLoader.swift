@@ -18,28 +18,28 @@ public final class LocalFeedLoader {
         self.currentTimestamp = currentTimestamp
     }
 
-    public func save(_ items: [FeedItem], completion: @escaping (SaveResult) -> Void) {
+    public func save(_ feed: [FeedImage], completion: @escaping (SaveResult) -> Void) {
         feedStore.deleteCashedFeed { [weak self] deletionError in
             guard let self = self else { return }
 
             if let deletionError = deletionError {
                 completion(deletionError)
             } else {
-                self.cashe(items, timeStamp: self.currentTimestamp(), completion: completion)
+                self.cashe(feed, timeStamp: self.currentTimestamp(), completion: completion)
             }
         }
     }
 
-    private func cashe(_ items: [FeedItem], timeStamp: Date, completion: @escaping (SaveResult) -> Void) {
-        feedStore.insert(items.toLocal(), timestamp: timeStamp) { [weak self] insertionError in
+    private func cashe(_ feed: [FeedImage], timeStamp: Date, completion: @escaping (SaveResult) -> Void) {
+        feedStore.insert(feed.toLocal(), timestamp: timeStamp) { [weak self] insertionError in
             guard self != nil else { return }
             completion(insertionError)
         }
     }
 }
 
-private extension Array where Element == FeedItem {
-    func toLocal() -> [LocalFeedItem] {
-        return self.map { LocalFeedItem(id: $0.id, description: $0.description, location: $0.location, imageUrl: $0.imageUrl) }
+private extension Array where Element == FeedImage {
+    func toLocal() -> [LocalFeedImage] {
+        return self.map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.imageUrl) }
     }
 }

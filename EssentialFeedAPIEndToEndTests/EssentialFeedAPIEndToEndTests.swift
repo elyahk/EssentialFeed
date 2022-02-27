@@ -12,8 +12,8 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
     func test_endToEndTestServerGETFeedResult_mathcesFixedTestAccountData() {
         let exp = expectation(description: "Wait for loading")
         switch getFeedResult() {
-        case let .success(feedItem)?:
-            XCTAssertEqual(feedItem.count, 8)
+        case let .success(feed)?:
+            XCTAssertEqual(feed.count, 8)
         case let .failure(error)?:
             XCTFail("Expected succes but got \(error) instead")
         default:
@@ -41,17 +41,17 @@ class EssentialFeedAPIEndToEndTests: XCTestCase {
                 receivedResult = result
                 exp.fulfill()
             }
-            wait(for: [exp], timeout: 5.0)
+            wait(for: [exp], timeout: 10.0)
 
             return receivedResult
         }
 
-        private func expectedItem(at index: Int) -> FeedItem {
-            return FeedItem(
+        private func expectedFeedImage(at index: Int) -> FeedImage {
+            return FeedImage(
                 id: id(at: index),
                 description: description(at: index),
                 location: location(at: index),
-                imageUrl: imageURL(at: index))
+                url: imageURL(at: index))
         }
 
         private func id(at index: Int) -> UUID {
