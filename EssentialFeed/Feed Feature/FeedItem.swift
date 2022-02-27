@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import CloudKit
-import AppKit
 
 public struct FeedItem: Equatable {
     public let id: UUID
