@@ -16,19 +16,17 @@ class CasheFeedUseCaseTests: XCTestCase {
 
     func test_save_deleteCashe() {
         let (sut, feedStore) = makeSUT()
-        let items = [uniqueItem(), uniqueItem()]
 
-        sut.save(items) { _ in }
+        sut.save(uniuqueItems().models) { _ in }
 
         XCTAssertEqual(feedStore.recievedMessage, [.deletion])
     }
 
     func test_save_doesNotSaveCasheUponDeletionError() {
         let (sut, feedStore) = makeSUT()
-        let items = [uniqueItem(), uniqueItem()]
         let anyError = anyNSError()
 
-        sut.save(items) { _ in }
+        sut.save(uniuqueItems().models) { _ in }
         feedStore.completeDeletion(with: anyError)
 
         XCTAssertEqual(feedStore.recievedMessage, [.deletion])
@@ -37,13 +35,12 @@ class CasheFeedUseCaseTests: XCTestCase {
     func test_save_saveCasheWithTimeStampUponDeletionSuccessfully() {
         let timestamp = Date()
         let (sut, feedStore) = makeSUT(currentTimestamp: { timestamp } )
-        let items = [uniqueItem(), uniqueItem()]
-        let localItems = items.map { LocalFeedItem(id: $0.id, description: $0.description, location: $0.location, imageUrl: $0.imageUrl) }
+        let uniuqueItems = uniuqueItems()
 
-        sut.save(items) { _ in }
+        sut.save(uniuqueItems.models) { _ in }
         feedStore.completeDeletionSuccessfully()
 
-        XCTAssertEqual(feedStore.recievedMessage, [.deletion, .insert(localItems, timestamp)])
+        XCTAssertEqual(feedStore.recievedMessage, [.deletion, .insert(uniuqueItems.local, timestamp)])
     }
 
     func test_save_failsUponDeletionError() {
@@ -79,7 +76,7 @@ class CasheFeedUseCaseTests: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(feedStore: store, currentTimestamp: Date.init)
 
         var recieveResults: [LocalFeedLoader.SaveResult] = []
-        sut?.save([uniqueItem(), uniqueItem()]) { recieveResults.append($0) }
+        sut?.save(uniuqueItems().models) { recieveResults.append($0) }
         sut = nil
 
         store.completeDeletion(with: anyNSError())
@@ -92,7 +89,7 @@ class CasheFeedUseCaseTests: XCTestCase {
         var sut: LocalFeedLoader? = LocalFeedLoader(feedStore: store, currentTimestamp: Date.init)
 
         var recieveResults: [Error?] = []
-        sut?.save([uniqueItem(), uniqueItem()]) { recieveResults.append($0) }
+        sut?.save(uniuqueItems().models) { recieveResults.append($0) }
 
         store.completeDeletionSuccessfully()
         sut = nil
@@ -115,11 +112,9 @@ class CasheFeedUseCaseTests: XCTestCase {
     }
 
     private func assert(_ sut: LocalFeedLoader, toCompleteWith expectedError: NSError?, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
-        let items = [uniqueItem(), uniqueItem()]
-
         let exp = expectation(description: "Wait for completion")
         var recivedError: Error?
-        sut.save(items) { error in
+        sut.save(uniuqueItems().models) { error in
             recivedError = error
             exp.fulfill()
         }
@@ -129,6 +124,27 @@ class CasheFeedUseCaseTests: XCTestCase {
 
         XCTAssertEqual(recivedError as NSError?, expectedError)
     }
+
+    private func uniuqueItems() -> (local: [LocalFeedItem], models: [FeedItem]) {
+        let items = [uniqueItem(), uniqueItem()]
+        let localItems = items.map { LocalFeedItem(id: $0.id, description: $0.description, location: $0.location, imageUrl: $0.imageUrl) }
+
+        return (localItems, items)
+    }
+
+    private func uniqueItem() -> FeedItem {
+        FeedItem(id: UUID(), description: "any", location: "any", imageUrl: anyURL())
+    }
+
+    private func anyURL() -> URL {
+        return URL(string: "https://a-url.com")!
+    }
+
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any error", code: 0)
+    }
+
+    // MARK: - FeedStoreSpy
 
     private class FeedStoreSpy: FeedStore {
         enum Message: Equatable {
@@ -166,17 +182,5 @@ class CasheFeedUseCaseTests: XCTestCase {
         func completeInsertionSuccessfully(at index: Int = 0) {
             insertionCompletions[index](nil)
         }
-    }
-
-    private func uniqueItem() -> FeedItem {
-        FeedItem(id: UUID(), description: "any", location: "any", imageUrl: anyURL())
-    }
-
-    private func anyURL() -> URL {
-        return URL(string: "https://a-url.com")!
-    }
-
-    private func anyNSError() -> NSError {
-        return NSError(domain: "any error", code: 0)
     }
 }
