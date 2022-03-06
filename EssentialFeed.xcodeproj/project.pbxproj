@@ -110,6 +110,7 @@
 		2CA46E2527860DE700B3D776 = {
 			isa = PBXGroup;
 			children = (
+				2C9EAC8927D458B1006F355A /* MyPlayground.playground */,
 				2CA46E3127860DE700B3D776 /* EssentialFeed */,
 				2CA46E3B27860DE800B3D776 /* EssentialFeedTests */,
 				2C44580A278E8FFD007AA273 /* EssentialFeedAPIEndToEndTests */,
@@ -130,7 +131,6 @@
 		2CA46E3127860DE700B3D776 /* EssentialFeed */ = {
 			isa = PBXGroup;
 			children = (
-				2C9EAC8927D458B1006F355A /* MyPlayground.playground */,
 				2C0F075D27870B4400DA9C31 /* Feed Api */,
 				2CA46E4B27860F2B00B3D776 /* Feed Feature */,
 			);
