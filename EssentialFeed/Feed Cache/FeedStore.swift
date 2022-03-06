@@ -15,17 +15,4 @@ public protocol FeedStore {
     func insert(_ items: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion)
 }
 
-public struct LocalFeedImage: Equatable {
-    public let id: UUID
-    public let description: String?
-    public let location: String?
-    public let imageUrl: URL
-
-    public init(id: UUID, description: String?, location: String?, url: URL) {
-        self.id = id
-        self.description = description
-        self.location = location
-        self.imageUrl = url
-    }
-}
 
