@@ -22,17 +22,23 @@ public class LocalFeedLoader {
         store.deleteCashedFeed() { [weak self] deletionError in
             guard let self = self else { return }
             if deletionError == nil {
-                self.cache(items, timestamp: self.currentDate(), with: completion)
+                self.cache(items.toLocal(), timestamp: self.currentDate(), with: completion)
             } else {
                 completion(deletionError)
             }
         }
     }
 
-    private func cache(_ items: [FeedImage], timestamp: Date, with completion: @escaping (SaveResult) -> Void) {
+    private func cache(_ items: [LocalFeedImage], timestamp: Date, with completion: @escaping (SaveResult) -> Void) {
         self.store.insert(items, timestamp: timestamp) { [weak self] error in
             guard let _ = self else { return }
             completion(error)
         }
+    }
+}
+
+private extension Array where Element == FeedImage {
+    func toLocal() -> [LocalFeedImage] {
+        return map { LocalFeedImage(id: $0.id, description: $0.description, location: $0.location, url: $0.imageUrl)}
     }
 }
