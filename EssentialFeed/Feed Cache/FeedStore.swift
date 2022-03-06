@@ -9,6 +9,7 @@ import Foundation
 
 public enum RetrievalResult {
     case failure(Error)
+    case found([LocalFeedImage], Date)
     case empty
 }
 
