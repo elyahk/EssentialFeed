@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias FailableFeedStore = FailableDeleteFeedStoreSpecs & FailableInsertFeedStoreSpecs & FailableRetrieveFeedStoreSpecs
+
 protocol FeedStoreSpecs {
     func test_retrieve_delieversEmptyOnEmptyCache()
     func test_retrieve_hasNoSideEffectOnEmptyCache()
@@ -21,9 +23,9 @@ protocol FeedStoreSpecs {
     func test_storeSideEffects_runSerially()
 }
 
-protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {
-    func test_retrieve_deliversErrorOnInvalidCache()
-    func test_retrieve_hasNoSideEffectsOnInvalidCache()
+protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
+    func test_delete_deliversErrorOnDeletionError()
+    func test_delete_noSideEffectsOnDeletionError()
 }
 
 protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
@@ -31,9 +33,7 @@ protocol FailableInsertFeedStoreSpecs: FeedStoreSpecs {
     func test_insert_noSideEffectsOnInsertionError()
 }
 
-protocol FailableDeleteFeedStoreSpecs: FeedStoreSpecs {
-    func test_delete_deliversErrorOnDeletionError()
-    func test_delete_noSideEffectsOnDeletionError()
+protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {
+    func test_retrieve_deliversErrorOnInvalidCache()
+    func test_retrieve_hasNoSideEffectsOnInvalidCache()
 }
-
-typealias FailableFeedStore = FailableDeleteFeedStoreSpecs & FailableInsertFeedStoreSpecs & FailableRetrieveFeedStoreSpecs
