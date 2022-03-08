@@ -123,6 +123,21 @@ class CodableFeedStoreTests: XCTestCase {
         expect(sut, toRetrieveTwice: .failure(anyNSError()))
     }
 
+    func test_insert_overridesPreviouslyInsertedCacheValues() {
+        let sut = makeSUT()
+
+        let firstInsertionError = insert(feed: uniqueImageFeed().locals, timestamp: Date(), to: sut)
+        XCTAssertNil(firstInsertionError, "Expected insert successfully")
+
+        let latesFeed = uniqueImageFeed().locals
+        let latesTimestamp = Date()
+        let latestInsertionError = insert(feed: latesFeed, timestamp: latesTimestamp, to: sut)
+        XCTAssertNil(latestInsertionError, "Expected successfully override data")
+
+        expect(sut, toRetrieveTwice: .found(latesFeed, latesTimestamp))
+    }
+
+
     // MARK: - Helpers
 
     private var testSpecificStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store") }
@@ -134,13 +149,18 @@ class CodableFeedStoreTests: XCTestCase {
         return sut
     }
 
-    private func insert(feed: [LocalFeedImage], timestamp: Date, to sut: CodableFeedStore) {
+    @discardableResult
+    private func insert(feed: [LocalFeedImage], timestamp: Date, to sut: CodableFeedStore) -> Error? {
         let exp = expectation(description: "Wait for cache retrieval")
+        var recievedError: Error?
         sut.insert(feed, timestamp: timestamp) { insertionError in
             XCTAssertNil(insertionError, "Expected feed to be inserted successfully")
+            recievedError = insertionError
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+
+        return recievedError
     }
 
     private func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrievalResult) {
