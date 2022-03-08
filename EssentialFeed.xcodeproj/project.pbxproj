@@ -248,12 +248,12 @@
 		2CEA0B0327D3699900CD0B3B /* Feed Cashe */ = {
 			isa = PBXGroup;
 			children = (
+				2C89EDB827D7C9A60009FBDE /* FeedStoreSpecs */,
 				2C5C738A27D50DD800EA6CA3 /* Helpers */,
 				2CEA0B0427D369AE00CD0B3B /* CasheFeedUseCaseTests.swift */,
 				2C5C738827D50D2600EA6CA3 /* LoadFeedFromCacheUseCaseTests.swift */,
 				2C5C738D27D532CD00EA6CA3 /* ValidateFeedCacheUseCaseTests.swift */,
 				2CC45A6B27D726840040F691 /* CodableFeedStoreTests.swift */,
-				2C89EDB827D7C9A60009FBDE /* FeedStoreSpecs */,
 				2C89EDC127D7D6400009FBDE /* CoreDataFeedStoreTests.swift */,
 			);
 			path = "Feed Cashe";

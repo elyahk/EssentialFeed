@@ -9,13 +9,31 @@ import Foundation
 import XCTest
 import EssentialFeed
 
-final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
-    func test_retrieve_delieversEmptyOnEmptyCache() {
+final class CoreDataFeedStore: FeedStore {
+    func retrieve(completion: @escaping RetrievalCompletion) {
+        completion(.empty)
+    }
+
+    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 
     }
 
-    func test_retrieve_hasNoSideEffectOnEmptyCache() {
+    func deleteCashedFeed(completion: @escaping DeletionCompletion) {
 
+    }
+}
+
+final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
+    func test_retrieve_delieversEmptyOnEmptyCache() {
+        let sut = makeSUT()
+
+        assertThatDeliversEmptyOnEmptyCache(on: sut)
+    }
+
+    func test_retrieve_hasNoSideEffectOnEmptyCache() {
+        let sut = makeSUT()
+
+        assertThatHasNoSideEffectOnEmptyCache(on: sut)
     }
 
     func test_retrieve_deliversFoundValuesOnNonEmptyCache() {
@@ -43,4 +61,10 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     }
 
 
+    // MARK: - Helpers
+
+    private func makeSUT() -> CoreDataFeedStore {
+        let sut = CoreDataFeedStore()
+        return sut
+    }
 }
