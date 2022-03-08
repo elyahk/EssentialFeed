@@ -135,6 +135,35 @@ class CodableFeedStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
+        let sut = makeSUT()
+        let feed = uniqueImageFeed().locals
+        let timestamp = Date()
+        let exp = expectation(description: "Wait for cache retrieval")
+
+        sut.insert(feed, timestamp: timestamp) { insertionError in
+            XCTAssertNil(insertionError, "Expected feed to be inserted successfully")
+
+            sut.retrieve { firstResult in
+                sut.retrieve { secondResult in
+                    switch (firstResult, secondResult) {
+                    case let (.found(firstFeed, firstTimestamp), .found(secondFeed, secondTimestamp)):
+                        XCTAssertEqual(firstFeed, feed)
+                        XCTAssertEqual(firstTimestamp, timestamp)
+
+                        XCTAssertEqual(secondFeed, feed)
+                        XCTAssertEqual(secondTimestamp, timestamp)
+                    default:
+                        XCTFail("Expected retrieving same result on non empty cache feed to delivers same found feed \(feed) and  timestamp \(timestamp), but got \(firstResult) and \(secondResult) instead")
+                    }
+
+                    exp.fulfill()
+                }
+            }
+        }
+
+        wait(for: [exp], timeout: 1.0)
+    }
     // MARK: - Helpers
 
     private var testSpecificStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store") }
