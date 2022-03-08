@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import EssentialFeed
 
-class CodableFeedStore {
+class CodableFeedStore: FeedStore {
     private struct Cache: Codable {
         let feed: [CodableFeedImage]
         let timestamp: Date
@@ -41,7 +41,7 @@ class CodableFeedStore {
         self.storURL = storeURL
     }
 
-    func retrieve(completion: @escaping FeedStore.RetrievalCompletion) {
+    func retrieve(completion: @escaping RetrievalCompletion) {
         guard let data = try? Data(contentsOf: storURL) else { return completion(.empty) }
 
         do {
@@ -53,7 +53,7 @@ class CodableFeedStore {
         }
     }
 
-    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
+    func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
         do {
             let encoder = JSONEncoder()
             let encoded = try encoder.encode(Cache(feed: feed.map(CodableFeedImage.init), timestamp: timestamp))
@@ -64,7 +64,7 @@ class CodableFeedStore {
         }
     }
 
-    func deleteCashedFeed(completion: @escaping FeedStore.DeletionCompletion) {
+    func deleteCashedFeed(completion: @escaping DeletionCompletion) {
         guard FileManager.default.fileExists(atPath: storURL.path) else { return completion(nil) }
 
         do {
@@ -197,7 +197,7 @@ class CodableFeedStoreTests: XCTestCase {
     private var testSpecificStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store") }
     private var documentStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first! }
 
-    private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
+    private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
         let sut = CodableFeedStore(storeURL: storeURL ?? testSpecificStoreURL)
         trackForMemoryLeak(sut, file: file, line: line)
 
@@ -205,7 +205,7 @@ class CodableFeedStoreTests: XCTestCase {
     }
 
     @discardableResult
-    private func deleteCache(from sut: CodableFeedStore) -> Error? {
+    private func deleteCache(from sut: FeedStore) -> Error? {
         let exp = expectation(description: "Wait for cache retrieval")
         var recievedError: Error?
         sut.deleteCashedFeed { deletionError in
@@ -219,7 +219,7 @@ class CodableFeedStoreTests: XCTestCase {
     }
 
     @discardableResult
-    private func insert(feed: [LocalFeedImage], timestamp: Date, to sut: CodableFeedStore) -> Error? {
+    private func insert(feed: [LocalFeedImage], timestamp: Date, to sut: FeedStore) -> Error? {
         let exp = expectation(description: "Wait for cache retrieval")
         var recievedError: Error?
         sut.insert(feed, timestamp: timestamp) { insertionError in
@@ -231,12 +231,12 @@ class CodableFeedStoreTests: XCTestCase {
         return recievedError
     }
 
-    private func expect(_ sut: CodableFeedStore, toRetrieveTwice expectedResult: RetrievalResult) {
+    private func expect(_ sut: FeedStore, toRetrieveTwice expectedResult: RetrievalResult) {
         expect(sut, toRetrieve: expectedResult)
         expect(sut, toRetrieve: expectedResult)
     }
 
-    private func expect(_ sut: CodableFeedStore, toRetrieve expectedResult: RetrievalResult) {
+    private func expect(_ sut: FeedStore, toRetrieve expectedResult: RetrievalResult) {
         let exp = expectation(description: "Wait for retrieve")
         sut.retrieve { recievedResult in
             switch (recievedResult, expectedResult) {
