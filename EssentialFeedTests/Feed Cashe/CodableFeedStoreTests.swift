@@ -146,7 +146,7 @@ class CodableFeedStoreTests: XCTestCase {
             op3.fulfill()
         }
 
-        wait(for: [op1, op2, op3], timeout: 5.0)
+        waitForExpectations(timeout: 5.0)
 
         XCTAssertEqual(completedOperationsInOrder, [op1, op2, op3])
     }
@@ -155,7 +155,7 @@ class CodableFeedStoreTests: XCTestCase {
     // MARK: - Helpers
 
     private var testSpecificStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store") }
-    private var documentStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first! }
+    private var documentStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .systemDomainMask).first! }
 
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
         let sut = CodableFeedStore(storeURL: storeURL ?? testSpecificStoreURL)
@@ -166,7 +166,7 @@ class CodableFeedStoreTests: XCTestCase {
 
     @discardableResult
     private func deleteCache(from sut: FeedStore) -> Error? {
-        let exp = expectation(description: "Wait for cache retrieval")
+        let exp = expectation(description: "Wait for cache deletion")
         var recievedError: Error?
         sut.deleteCashedFeed { deletionError in
             recievedError = deletionError
