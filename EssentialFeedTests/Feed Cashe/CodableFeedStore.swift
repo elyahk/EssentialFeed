@@ -63,6 +63,18 @@ class CodableFeedStore {
             completion(error)
         }
     }
+
+    func deleteCashedFeed(completion: @escaping FeedStore.DeletionCompletion) {
+        guard FileManager.default.fileExists(atPath: storURL.path) else { return completion(nil) }
+
+        do {
+            try FileManager.default.removeItem(at: storURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
+    }
+
 }
 
 class CodableFeedStoreTests: XCTestCase {
@@ -152,15 +164,58 @@ class CodableFeedStoreTests: XCTestCase {
         XCTAssertNotNil(firstInsertionError, "Expected insertion error")
     }
 
+    func test_delete_hasNoSideEffectsOnEmptyCache() {
+        let sut = makeSUT()
+
+        let deletionError = deleteCache(from: sut)
+
+        XCTAssertNil(deletionError, "Expected delete succeed")
+        expect(sut, toRetrieve: .empty)
+    }
+
+    func test_delete_nonEmptyCacheI() {
+        let sut = makeSUT()
+
+        insert(feed: uniqueImageFeed().locals, timestamp: Date(), to: sut)
+        let deletionError = deleteCache(from: sut)
+
+        XCTAssertNil(deletionError, "Expected delete succeed")
+        expect(sut, toRetrieve: .empty)
+    }
+
+    func test_delete_deliversErrorOnDeletionError() {
+        let nonDeletePermissionURL = documentStoreURL
+        let sut = makeSUT(storeURL: nonDeletePermissionURL)
+
+        let deletionError = deleteCache(from: sut)
+
+        XCTAssertNotNil(deletionError, "Expected delete error")
+    }
+
     // MARK: - Helpers
 
     private var testSpecificStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).store") }
+    private var documentStoreURL: URL { FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first! }
 
     private func makeSUT(storeURL: URL? = nil, file: StaticString = #filePath, line: UInt = #line) -> CodableFeedStore {
         let sut = CodableFeedStore(storeURL: storeURL ?? testSpecificStoreURL)
         trackForMemoryLeak(sut, file: file, line: line)
 
         return sut
+    }
+
+    @discardableResult
+    private func deleteCache(from sut: CodableFeedStore) -> Error? {
+        let exp = expectation(description: "Wait for cache retrieval")
+        var recievedError: Error?
+        sut.deleteCashedFeed { deletionError in
+            recievedError = deletionError
+            exp.fulfill()
+
+        }
+        wait(for: [exp], timeout: 1.0)
+
+        return recievedError
     }
 
     @discardableResult
