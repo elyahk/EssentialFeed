@@ -18,12 +18,14 @@ class LocalFeedLoader {
         self.currentDate = currentDate
     }
 
-    public func save(_ items: [FeedImage]) {
+    public func save(_ items: [FeedImage], completion: @escaping (Error?) -> Void) {
         store.deleteCache() { [weak self] deletionError in
             guard let self = self else { return }
 
             if deletionError == nil {
                 self.store.insert(items, timestamp: self.currentDate())
+            } else {
+                completion(deletionError)
             }
         }
     }
@@ -69,7 +71,7 @@ class CacheFeedUseCaseTests: XCTestCase {
     func test_save_requestsDeleteCache() {
         let (sut, store) = makeSUT()
 
-        sut.save([uniqueItem()])
+        sut.save([uniqueItem()]){ _ in }
 
         XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
     }
@@ -78,7 +80,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
 
-        sut.save([uniqueItem()])
+        sut.save([uniqueItem()]){ _ in }
         store.completeDeletion(with: deletionError)
 
         XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
@@ -89,10 +91,26 @@ class CacheFeedUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT(currentDate: { timestamp })
         let feed = [uniqueItem()]
 
-        sut.save(feed)
+        sut.save(feed) { _ in }
         store.completeDeletionSuccessfully()
 
         XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed, .insert(feed, timestamp)])
+    }
+
+    func test_save_failsOnDeletionError () {
+        let (sut, store) = makeSUT()
+        let deletionError = anyNSError()
+
+        var recievedError: Error?
+        let exp = expectation(description: "Wait for fails")
+        sut.save([uniqueItem()]) { error in
+            recievedError = error
+            exp.fulfill()
+        }
+        store.completeDeletion(with: deletionError)
+        wait(for: [exp], timeout: 1.0)
+
+        XCTAssertEqual(recievedError as NSError?, deletionError)
     }
 
     // MARK: - Helpers
