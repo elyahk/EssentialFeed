@@ -11,7 +11,7 @@ import EssentialFeed
 class FeedStoreSpy: FeedStore {
     var deletionCompletions: [DeletionCompletion] = []
     var insertionCompletions: [InsertionCompletion] = []
-    var retrievalCompletions: [InsertionCompletion] = []
+    var retrievalCompletions: [RetrievalCompletion] = []
 
     enum RecievedMessage: Equatable {
         case deleteCacheFeed
@@ -54,5 +54,9 @@ class FeedStoreSpy: FeedStore {
 
     func completeRetrieval(with error: Error, at index: Int = 0) {
         retrievalCompletions[index](error)
+    }
+
+    func completeRetrievalWithEmptyCache(at index: Int = 0) {
+        retrievalCompletions[index](nil)
     }
 }
