@@ -24,10 +24,10 @@ jobs:
     needs: build-and-test-coverage
     runs-on: ubuntu-latest
     steps:
-      uses: romeovs/lcov-reporter-action@v0.2.16
-      with:
-        lcov-file: ./coverage/lcov.info
-        coverage-job:
+      - uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: ./coverage/lcov.info
+          coverage-job:
 
 #    steps:
 #      - uses: actions/checkout@v2
