@@ -9,21 +9,21 @@ import XCTest
 import EssentialFeed
 
 class EssentialFeedAPIEndToEndTests: XCTestCase {
-    func test_endToEndTestServerGETFeedResult_mathcesFixedTestAccountData() {
-        let exp = expectation(description: "Wait for loading")
-        switch getFeedResult() {
-        case let .success(feed)?:
-            XCTAssertEqual(feed.count, 8)
-        case let .failure(error)?:
-            XCTFail("Expected succes but got \(error) instead")
-        default:
-            XCTFail("Expected result but got noting")
-        }
-
-        exp.fulfill()
-
-        wait(for: [exp], timeout: 10.0)
-    }
+//    func test_endToEndTestServerGETFeedResult_mathcesFixedTestAccountData() {
+//        let exp = expectation(description: "Wait for loading")
+//        switch getFeedResult() {
+//        case let .success(feed)?:
+//            XCTAssertEqual(feed.count, 8)
+//        case let .failure(error)?:
+//            XCTFail("Expected succes but got \(error) instead")
+//        default:
+//            XCTFail("Expected result but got noting")
+//        }
+//
+//        exp.fulfill()
+//
+//        wait(for: [exp], timeout: 10.0)
+//    }
 
     // MARK: - Helpers
 
