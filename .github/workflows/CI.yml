@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
-          totalCoverage=`20`
+          totalCoverage=20
           echo "Current test coverage: $totalCoverage %"
           if (( $(echo "$totalCoverage $TEST_COVERAGE_THRESHOLD | awk `{print($1 > $2)`) )); then echo "OK"
           else
