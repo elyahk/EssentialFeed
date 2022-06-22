@@ -19,15 +19,15 @@ jobs:
       - name: Build and Test
         run: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY=""  CODE_SIGNING_REQUIRED=NO
 
-  coverage-test-2:
-    name: Coverage Diff
-    needs: build-and-test-coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: romeovs/lcov-reporter-action@v0.2.16
+      - uses: ziishaned/jest-reporter-action@v0.0.1
         with:
-          lcov-file: ./coverage/lcov.info
-#          coverage-job:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+#  coverage-test-2:
+#    name: Coverage Diff
+#    needs: build-and-test-coverage
+#    runs-on: ubuntu-latest
+#    steps:
 
 #    steps:
 #      - uses: actions/checkout@v2
