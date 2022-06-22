@@ -10,7 +10,6 @@ on:
 jobs:
   build-and-test-coverage:
     runs-on: macos-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -20,17 +19,34 @@ jobs:
       - name: Build and Test
         run: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY=""  CODE_SIGNING_REQUIRED=NO
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
+  coverage-job:
+    needs: build-and-test-coverage
+    name: Coverage Diff
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: 16
           cache: npm
       - run: npm install
-
+      - run: npm run test
       - name: Coverage Diff
         uses: greatwizard/coverage-diff-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Setup Node
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: 16
+#          cache: npm
+#      - run: npm install
+#
+#      - name: Coverage Diff
+#        uses: greatwizard/coverage-diff-action@v1
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
 #      - name: Coverage Diff
 #          uses: greatwizard/coverage-diff-action@v1
 #          with:
