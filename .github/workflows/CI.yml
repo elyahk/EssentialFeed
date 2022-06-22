@@ -1,21 +1,47 @@
-name: CI
+name: Coverage Diff
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - master
+      - main
+  pull_request: {}
 
 jobs:
-  build-and-test:
-
+  build-and-test-coverage:
     runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build and Test
+    - name: Select xcode
       run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
 
     - name: Build and Test
       run: xcodebuild clean build test -project EssentialFeed/EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY=""  CODE_SIGNING_REQUIRED=NO
+
+    - name: Coverage Diff
+        uses: greatwizard/coverage-diff-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Path of the json-summary file to analyze.
+          coverage-filename: coverage/coverage-summary.json
+
+          # Name of the json file containing the repository's default branch json-summary stored in the repo wiki.
+          base-summary-filename: base-summary.json
+
+          # If true, it will not fail even if the current branch's coverage is lower than the default branch's coverage.
+          allowed-to-fail: false
+
+          # Whether or not a badge will be generated and stored.
+          badge-enabled: true
+
+          # Name of the json file containing badge informations stored in the repo wiki.
+          badge-filename: coverage-diff-badge.json
+
+          # If the coverage percentage is above or equal to this value, the badge will be green.
+          badge-threshold-green: 100
+
+          # If the coverage percentage is not green and above or equal to this value, the badge will be orange. Otherwise it will be red.
+          badge-threshold-orange: 70
