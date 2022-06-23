@@ -25,7 +25,6 @@ platform :macOS do
       workspace: APP_WORKSPACE,
       scheme: SCHEME,
       output_directory: "xcov_output",
-      only_project_targets: true,
       minimum_coverage_percentage: 29.0,
       xccov_file_direct_path: "xcov_output/xccovreport-0.xccovreport",
       json_report: true
