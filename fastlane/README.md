@@ -13,20 +13,20 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## iOS
+## macOS
 
-### ios unit_tests
+### macOS unit_tests
 
 ```sh
-[bundle exec] fastlane ios unit_tests
+[bundle exec] fastlane macOS unit_tests
 ```
 
-Run iOS unit tests
+Run Mac OS unit tests
 
-### ios code_coverage
+### macOS code_coverage
 
 ```sh
-[bundle exec] fastlane ios code_coverage
+[bundle exec] fastlane macOS code_coverage
 ```
 
 Generate code coverage
