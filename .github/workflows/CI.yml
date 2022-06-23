@@ -17,25 +17,31 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
 
       - name: Build and Test
-        run: xcodebuild clean build test -project EssentialFeed.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY=""  CODE_SIGNING_REQUIRED=NO
+        run: bundle exec fastlane code_coverage
 
       - name: Get Coverage Result
-        uses: romeovs/lcov-reporter-action@v0.2.16
-        id: get_coverage
+        id: coverage
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: 'xcov_output/report.json'
+          prop_path: 'coverage'
 
       - name: Show Result
+        env:
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
+
         run: |
-          echo "Total:  ${{ steps.get_coverage.outputs.total_coverage }}"
-          echo "Outputs:  ${{ steps.get_coverage.outputs }}"
+          echo "Total: $TOTAL_COVERAGE"
+
       - name: Quality Gate - Test coverage shall be above threshold
         env:
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
           TEST_COVERAGE_THRESHOLD: 30
         run: |
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
-          totalCoverage=20
-          echo "Current test coverage: $totalCoverage %"
-          if (( $(echo "$totalCoverage $TESTCOVERAGE_THRESHOLD" | awk '{print ($1 > $2)}') )); then
+          echo "Current test coverage: $TOTAL_COVERAGE %"
+          if (( $(echo "$TOTAL_COVERAGE $TESTCOVERAGE_THRESHOLD" | awk '{print ($1 > $2)}') )); then
             echo "OK"
           else
             echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
