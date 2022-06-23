@@ -23,6 +23,9 @@ jobs:
         run: bundle exec pod install
 
       - name: Build and Test
+        run: bundle exec fastlane unit_tests
+
+      - name: Generate Coverage
         run: bundle exec fastlane code_coverage
 
       - name: Get Coverage Result
