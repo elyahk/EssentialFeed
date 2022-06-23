@@ -16,6 +16,12 @@ jobs:
       - name: Select xcode
         run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
 
+      - name: Install Bundler dependencies
+        run: bundle install
+
+      - name: Install Cocoapods dependencies
+        run: bundle exec pod install
+
       - name: Build and Test
         run: bundle exec fastlane code_coverage
 
