@@ -13,20 +13,28 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## macOS
+## Mac
 
-### macOS unit_tests
+### mac register_app
 
 ```sh
-[bundle exec] fastlane macOS unit_tests
+[bundle exec] fastlane mac register_app
+```
+
+Register
+
+### mac unit_tests
+
+```sh
+[bundle exec] fastlane mac unit_tests
 ```
 
 Run Mac OS unit tests
 
-### macOS code_coverage
+### mac code_coverage
 
 ```sh
-[bundle exec] fastlane macOS code_coverage
+[bundle exec] fastlane mac code_coverage
 ```
 
 Generate code coverage

@@ -1,11 +1,20 @@
-default_platform(:ios)
+default_platform(:mac)
 
-platform :macOS do
+platform :mac do
   before_all do
     APP_PROJECT = "EssentialFeed.xcodeproj"
     APP_WORKSPACE = "EssentialFeed.xcworkspace"
     TEST_DEVICES = [ "My Mac" ]
     SCHEME = "CI"
+  end
+
+  desc "Register"
+  lane :register_app do
+    produce(
+        username: "elyahk123@gmail.com",
+        app_identifier: "elyahk.EssentialFeed",
+        app_name: "EssentialFeed"
+    )
   end
 
   desc "Run Mac OS unit tests"
