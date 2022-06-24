@@ -41,10 +41,9 @@ jobs:
       - name: Show Result
         id: result
         env:
-          TOTAL_COVERAGE_NUMBER: ${{steps.coverage.outputs.prop}}
-          TOTAL_COVERAGE: 'expr $TOTAL_COVERAGE \* 100.0'
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
         run: |
-          echo "Total: $TOTAL_COVERAGE_NUMBER"
+          echo "Total: $TOTAL_COVERAGE"
 
       - name: Quality Gate - Test coverage shall be above threshold
         env:
