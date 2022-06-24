@@ -1,8 +1,8 @@
 //
-//  FeedImage.swift
+//  FeedImage2.swift
 //  EssentialFeed
 //
-//  Created by Eldorbek on 05/01/22.
+//  Created by Eldorbek on 24/06/22.
 //
 
 import Foundation
