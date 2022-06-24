@@ -46,11 +46,11 @@ jobs:
         run: |
           echo "Total: $TOTAL_COVERAGE"
 
-#      - name: Upload Artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: code-coverage-artifact
-#          path: xcov_output/report.json
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-artifact
+          path: xcov_output/report.json
 
       - name: DownLoad artifacts
         uses: actions/download-artifact@v3
