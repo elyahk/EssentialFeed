@@ -38,6 +38,11 @@ jobs:
           path: 'xcov_output/report.json'
           prop_path: 'coverage'
 
+      - uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Show Result
         env:
           TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
