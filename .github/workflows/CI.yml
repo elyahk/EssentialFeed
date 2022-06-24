@@ -40,19 +40,19 @@ jobs:
 
       - name: Show Result
         env:
-          TOTAL_COVERAGE: $((${{steps.coverage.outputs.prop}} * 100))
+          TOTAL_COVERAGE: $((${{steps.coverage.outputs.prop}}*100))
 
         run: |
-          echo "Total: $TOTAL_COVERAGE"
+          echo "Total: $(($TOTAL_COVERAGE*100))"
 
       - name: Quality Gate - Test coverage shall be above threshold
         env:
-          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
+          TOTAL_COVERAGE: $((${{steps.coverage.outputs.prop}}*100))
           TEST_COVERAGE_THRESHOLD: 30
         run: |
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
-          echo "Current test coverage: $TOTAL_COVERAGE %"
+          echo "Current test coverage: $(($TOTAL_COVERAGE*100)) %"
           if (( $(echo "$TOTAL_COVERAGE $TESTCOVERAGE_THRESHOLD" | awk '{print ($1 > $2)}') )); then
             echo "OK"
           else
