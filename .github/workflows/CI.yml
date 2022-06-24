@@ -40,7 +40,7 @@ jobs:
 
       - name: Show Result
         env:
-          TOTAL_COVERAGE: '${{steps.coverage.outputs.prop}} * 100'
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop * 100}}
 
         run: |
           echo "Total: $TOTAL_COVERAGE"
