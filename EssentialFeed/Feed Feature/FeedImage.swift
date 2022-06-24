@@ -1,5 +1,5 @@
 //
-//  FeedImage2.swift
+//  FeedImage.swift
 //  EssentialFeed
 //
 //  Created by Eldorbek on 24/06/22.
