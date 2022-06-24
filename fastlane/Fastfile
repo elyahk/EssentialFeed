@@ -8,15 +8,6 @@ platform :mac do
     SCHEME = "CI"
   end
 
-  desc "Register"
-  lane :register_app do
-    produce(
-        username: "elyahk123@gmail.com",
-        app_identifier: "elyahk.EssentialFeed",
-        app_name: "EssentialFeed"
-    )
-  end
-
   desc "Run Mac OS unit tests"
   lane :unit_tests do
     run_tests(

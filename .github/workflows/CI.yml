@@ -29,7 +29,7 @@ jobs:
 #        run: bundle exec fastlane macOS unit_tests
 
       - name: Generate Coverage
-        run: bundle exec fastlane macOS code_coverage
+        run: bundle exec fastlane mac code_coverage
 
       - name: Get Coverage Result
         id: coverage
