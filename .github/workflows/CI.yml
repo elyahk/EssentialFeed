@@ -12,7 +12,6 @@ on:
 
 jobs:
   build-and-test-coverage:
-    id: main-job
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -81,7 +80,7 @@ jobs:
             exit 1
           fi
   Upload-artifacts:
-    needs: main-job
+    needs: build-and-test-coverage
     runs-on: macos-latest
     steps:
       - name: Upload Artifacts
