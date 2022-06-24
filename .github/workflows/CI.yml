@@ -1,6 +1,5 @@
 name: Coverage Diff
 env:
-  CODE_COVERAGE_PATH:'xcov_output/report.json'
   ARTIFACT_PATH: "downloads"
 
 on:
