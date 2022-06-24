@@ -1,4 +1,7 @@
 name: Coverage Diff
+env:
+  CODE_COVERAGE_PATH: "xcov_output/report.json"
+  ARTIFACT_PATH: "downloads"
 
 on:
   push:
@@ -35,13 +38,8 @@ jobs:
         id: coverage
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: 'xcov_output/report.json'
+          path: CODE_COVERAGE_PATH
           prop_path: 'coverage'
-
-      - uses: actions/download-artifact@v3
-
-      - name: Display structure of downloaded files
-        run: ls -R
 
       - name: Show Result
         env:
@@ -49,10 +47,27 @@ jobs:
         run: |
           echo "Total: $TOTAL_COVERAGE"
 
+      - name: DownLoad artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: code-coverage-artifact
+          path: ARTIFACT_PATH
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ARTIFACT_PATH
+
+      - name: Get Coverage Artifact Result
+        id: result-coverage
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "downloads/report.json"
+          prop_path: 'coverage'
+
       - name: Quality Gate - Test coverage shall be above threshold
         env:
           TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
-          TEST_COVERAGE_THRESHOLD: 30
+          TEST_COVERAGE_THRESHOLD: ${{steps.result-coverage.outputs.prop}}
         run: |
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
@@ -64,6 +79,14 @@ jobs:
             echo "Failed"
             exit 1
           fi
+  Upload-artifacts:
+    runs-on: macos-latest
+    steps:
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-artifact
+          path: CODE_COVERAGE_PATH
 
 #  coverage-test-2:
 #    name: Coverage Diff
