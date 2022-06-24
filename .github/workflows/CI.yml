@@ -84,12 +84,19 @@ jobs:
             echo "Failed"
             exit 1
           fi
-  Upload-artifacts:
-    needs: build-and-test-coverage
-    runs-on: macos-latest
-    steps:
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-artifact
           path: xcov_output/report.json
+
+#  Upload-artifacts:
+#    needs: build-and-test-coverage
+#    runs-on: macos-latest
+#    steps:
+#      - name: Upload Artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: code-coverage-artifact
+#          path: xcov_output/report.json
