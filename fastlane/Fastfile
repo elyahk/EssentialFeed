@@ -24,9 +24,9 @@ platform :mac do
     xcov(
       workspace: APP_WORKSPACE,
       scheme: SCHEME,
+      only_project_targets: true,
       output_directory: "xcov_output",
       minimum_coverage_percentage: 29.0,
-      xccov_file_direct_path: "xcov_output/xccovreport-0.xccovreport",
       json_report: true
     )
   end
