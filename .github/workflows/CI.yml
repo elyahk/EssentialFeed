@@ -1,0 +1,117 @@
+name: Coverage Diff
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+jobs:
+  build-and-test-coverage:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Select xcode
+        run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
+
+      - name: Install Bundler dependencies
+        run: bundle install
+
+      - name: Install Cocoapods dependencies
+        run: bundle exec pod install
+
+      - name: Test
+        run: xcodebuild clean build test -workspace EssentialFeed.xcworkspace -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
+#      - name: Build and Test
+#        run: bundle exec fastlane macOS unit_tests
+
+      - name: Generate Coverage
+        run: bundle exec fastlane mac code_coverage
+
+      - name: Get Coverage Result
+        id: coverage
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: 'xcov_output/report.json'
+          prop_path: 'coverage'
+
+      - name: Show Result
+        env:
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
+
+        run: |
+          echo "Total: $TOTAL_COVERAGE"
+
+      - name: Quality Gate - Test coverage shall be above threshold
+        env:
+          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
+          TEST_COVERAGE_THRESHOLD: 30
+        run: |
+          echo "Quaility Gate: checking test coverage is above threshold ..."
+          echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
+          echo "Current test coverage: $TOTAL_COVERAGE %"
+          if (( $(echo "$TOTAL_COVERAGE $TESTCOVERAGE_THRESHOLD" | awk '{print ($1 > $2)}') )); then
+            echo "OK"
+          else
+            echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
+            echo "Failed"
+            exit 1
+          fi
+
+#  coverage-test-2:
+#    name: Coverage Diff
+#    needs: build-and-test-coverage
+#    runs-on: ubuntu-latest
+#    steps:
+
+#    steps:
+#      - uses: actions/checkout@v2
+##      - uses: actions/setup-node@v2
+##        with:
+##          node-version: 16
+##          cache: npm
+##      - run: npm install
+##      - run: npm run test
+#      - name: Coverage Diff
+#        uses: greatwizard/coverage-diff-action@v1
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Setup Node
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: 16
+#          cache: npm
+#      - run: npm install
+#
+#      - name: Coverage Diff
+#        uses: greatwizard/coverage-diff-action@v1
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Coverage Diff
+#          uses: greatwizard/coverage-diff-action@v1
+#          with:
+#            github-token: ${{ secrets.GITHUB_TOKEN }}
+#
+#          # Path of the json-summary file to analyze.
+#            coverage-filename: coverage/coverage-summary.json
+#
+#          # Name of the json file containing the repository's default branch json-summary stored in the repo wiki.
+#            base-summary-filename: base-summary.json
+#
+#          # If true, it will not fail even if the current branch's coverage is lower than the default branch's coverage.
+#            allowed-to-fail: false
+#
+#          # Whether or not a badge will be generated and stored.
+#            badge-enabled: true
+#
+#          # Name of the json file containing badge informations stored in the repo wiki.
+#            badge-filename: coverage-diff-badge.json
+#
+#          # If the coverage percentage is above or equal to this value, the badge will be green.
+#            badge-threshold-green: 100
+#
+#          # If the coverage percentage is not green and above or equal to this value, the badge will be orange. Otherwise it will be red.
+#            badge-threshold-orange: 70

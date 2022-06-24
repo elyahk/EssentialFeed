@@ -1,0 +1,33 @@
+default_platform(:mac)
+
+platform :mac do
+  before_all do
+    APP_PROJECT = "EssentialFeed.xcodeproj"
+    APP_WORKSPACE = "EssentialFeed.xcworkspace"
+    TEST_DEVICES = [ "My Mac" ]
+    SCHEME = "CI"
+  end
+
+  desc "Run Mac OS unit tests"
+  lane :unit_tests do
+    run_tests(
+        workspace: APP_WORKSPACE,
+        scheme: SCHEME,
+        code_coverage: true,
+        build_for_testing: true,
+        open_report: true
+    )
+  end
+
+  desc "Generate code coverage"
+  lane :code_coverage do
+    xcov(
+      workspace: APP_WORKSPACE,
+      scheme: SCHEME,
+      output_directory: "xcov_output",
+      minimum_coverage_percentage: 29.0,
+      xccov_file_direct_path: "xcov_output/xccovreport-0.xccovreport",
+      json_report: true
+    )
+  end
+end
