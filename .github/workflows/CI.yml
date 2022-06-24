@@ -12,6 +12,7 @@ on:
 
 jobs:
   build-and-test-coverage:
+    id: main-job
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +39,7 @@ jobs:
         id: coverage
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: CODE_COVERAGE_PATH
+          path: $CODE_COVERAGE_PATH
           prop_path: 'coverage'
 
       - name: Show Result
@@ -80,6 +81,7 @@ jobs:
             exit 1
           fi
   Upload-artifacts:
+    needs: main-job
     runs-on: macos-latest
     steps:
       - name: Upload Artifacts
