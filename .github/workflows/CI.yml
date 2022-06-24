@@ -1,6 +1,6 @@
 name: Coverage Diff
 env:
-  CODE_COVERAGE_PATH: "xcov_output/report.json"
+  CODE_COVERAGE_PATH:'xcov_output/report.json'
   ARTIFACT_PATH: "downloads"
 
 on:
@@ -38,7 +38,7 @@ jobs:
         id: coverage
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: $CODE_COVERAGE_PATH
+          path: 'xcov_output/report.json'
           prop_path: 'coverage'
 
       - name: Show Result
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-artifact
-          path: CODE_COVERAGE_PATH
+          path: xcov_output/report.json
 
 #  coverage-test-2:
 #    name: Coverage Diff
