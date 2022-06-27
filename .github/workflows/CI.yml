@@ -33,70 +33,53 @@ jobs:
       - name: Generate Coverage
         run: bundle exec fastlane mac code_coverage
 
-      - name: Get Coverage Result
+      - name: Cache Code Coverage
+        id: cache-code-coverage
+        uses: actions/cache@v3
+        with:
+          path: downloads
+          key: ${{ runner.os }}-code-coverage
+
+      - name: Restore Code Coverage
+        if: steps.cache-code-coverage.outputs.cache-hit != 'true'
+        run: |
+          mkdir downloads
+          cp xcov_output/report.json downloads
+
+      - name: Get Current Coverage Result
         id: coverage
         uses: notiz-dev/github-action-json-property@release
         with:
           path: 'xcov_output/report.json'
           prop_path: 'coverage'
 
-      - name: Show Result
-        env:
-          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
-        run: |
-          echo "Total: $TOTAL_COVERAGE"
-
-#      - name: Upload Artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: code-coverage-artifact
-#          path: xcov_output/report.json
-
-      - name: DownLoad artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: code-coverage-artifact
-          path: downloads
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: downloads
-
-      - name: Get Coverage Artifact Result
-        id: result-coverage
+      - name: Get Treshold Coverage Result
+        id: treshold-coverage
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: "downloads/report.json"
+          path: 'downloads/report.json'
           prop_path: 'coverage'
+
+      - name: Show Result
+        env:
+          CURRENT_COVERAGE: ${{steps.coverage.outputs.prop}}
+          TRESHOLD_COVERAGE: ${{steps.treshold-coverage.outputs.prop}}
+        run: |
+          echo "Current: $CURRENT_COVERAGE"
+          echo "Treshold: $TRESHOLD_COVERAGE"
 
       - name: Quality Gate - Test coverage shall be above threshold
         env:
-          TOTAL_COVERAGE: ${{steps.coverage.outputs.prop}}
-          TEST_COVERAGE_THRESHOLD: ${{steps.result-coverage.outputs.prop}}
+          CURRENT_COVERAGE: ${{steps.coverage.outputs.prop}}
+          TRESHOLD_COVERAGE: ${{steps.treshold-coverage.outputs.prop}}
         run: |
           echo "Quaility Gate: checking test coverage is above threshold ..."
-          echo "Threshold                     : $TEST_COVERAGE_THRESHOLD %"
-          echo "Current test coverage: $TOTAL_COVERAGE %"
-          if (( $(echo "$TOTAL_COVERAGE $TESTCOVERAGE_THRESHOLD" | awk '{print ($1 > $2)}') )); then
+          echo "Threshold                     : $TRESHOLD_COVERAGE %"
+          echo "Current test coverage: $CURRENT_COVERAGE %"
+          if (( $(echo "$CURRENT_COVERAGE $TRESHOLD_COVERAGE" | awk '{print ($1 >= $2)}') )); then
             echo "OK"
           else
             echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
             echo "Failed"
             exit 1
           fi
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-artifact
-          path: xcov_output/report.json
-
-#  Upload-artifacts:
-#    needs: build-and-test-coverage
-#    runs-on: macos-latest
-#    steps:
-#      - name: Upload Artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: code-coverage-artifact
-#          path: xcov_output/report.json
