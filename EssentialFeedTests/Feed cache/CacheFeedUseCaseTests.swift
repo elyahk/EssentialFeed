@@ -10,101 +10,101 @@ import XCTest
 import EssentialFeed
 
 class CacheFeedUseCaseTests: XCTestCase {
-    func test_init_doesNotDeleteCacheUponCreation() {
-        let (_, store) = makeSUT()
-
-        XCTAssertEqual(store.recievedMessages, [])
-    }
-
-    func test_save_requestsDeleteCache() {
-        let (sut, store) = makeSUT()
-
-        sut.save(uniqueFeed().model){ _ in }
-
-        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
-    }
-
-    func test_save_doesNotRequestInsertionOnDeletionError() {
-        let (sut, store) = makeSUT()
-        let deletionError = anyNSError()
-
-        sut.save(uniqueFeed().model){ _ in }
-        store.completeDeletion(with: deletionError)
-
-        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
-    }
-
-    func test_save_requestsInsertNewCacheWithTiemstampOnDeletionSuccessfully() {
-        let timestamp = Date()
-        let (sut, store) = makeSUT(currentDate: { timestamp })
-        let feed = uniqueFeed()
-
-        sut.save(feed.model) { _ in }
-        store.completeDeletionSuccessfully()
-
-        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed, .insert(feed.local, timestamp)])
-    }
-
-    func test_save_failsOnDeletionError () {
-        let (sut, store) = makeSUT()
-        let deletionError = anyNSError()
-
-        expect(sut, toCompleteWith: deletionError, when: {
-            store.completeDeletion(with: deletionError)
-        })
-    }
-
-    func test_save_failsOnInsertionError () {
-        let (sut, store) = makeSUT()
-        let insertionError = anyNSError()
-
-        expect(sut, toCompleteWith: insertionError, when: {
-            store.completeDeletionSuccessfully()
-            store.completeInsertion(with: insertionError)
-        })
-    }
-
-    func test_save_successedsOnSuccess () {
-        let (sut, store) = makeSUT()
-
-        expect(sut, toCompleteWith: nil, when: {
-            store.completeDeletionSuccessfully()
-            store.completeInsertionSuccessfully()
-        })
-    }
-
-    func test_save_doesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated() {
-        let currentDate = Date()
-        let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: { currentDate })
-
-        var recievedErrors = [LocalFeedLoader.SaveResult]()
-        sut?.save(uniqueFeed().model, completion: { error in
-            recievedErrors.append(error)
-        })
-
-        sut = nil
-        store.completeDeletion(with: anyNSError())
-
-        XCTAssertTrue(recievedErrors.isEmpty)
-    }
-
-    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated() {
-        let currentDate = Date()
-        let store = FeedStoreSpy()
-        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: { currentDate })
-
-        var recievedErrors = [LocalFeedLoader.SaveResult]()
-        sut?.save(uniqueFeed().model, completion: { error in
-            recievedErrors.append(error)
-        })
-
-        store.completeDeletionSuccessfully()
-        sut = nil
-        store.completeInsertion(with: anyNSError())
-
-        XCTAssertTrue(recievedErrors.isEmpty)
-    }
+//    func test_init_doesNotDeleteCacheUponCreation() {
+//        let (_, store) = makeSUT()
+//
+//        XCTAssertEqual(store.recievedMessages, [])
+//    }
+//
+//    func test_save_requestsDeleteCache() {
+//        let (sut, store) = makeSUT()
+//
+//        sut.save(uniqueFeed().model){ _ in }
+//
+//        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
+//    }
+//
+//    func test_save_doesNotRequestInsertionOnDeletionError() {
+//        let (sut, store) = makeSUT()
+//        let deletionError = anyNSError()
+//
+//        sut.save(uniqueFeed().model){ _ in }
+//        store.completeDeletion(with: deletionError)
+//
+//        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
+//    }
+//
+//    func test_save_requestsInsertNewCacheWithTiemstampOnDeletionSuccessfully() {
+//        let timestamp = Date()
+//        let (sut, store) = makeSUT(currentDate: { timestamp })
+//        let feed = uniqueFeed()
+//
+//        sut.save(feed.model) { _ in }
+//        store.completeDeletionSuccessfully()
+//
+//        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed, .insert(feed.local, timestamp)])
+//    }
+//
+//    func test_save_failsOnDeletionError () {
+//        let (sut, store) = makeSUT()
+//        let deletionError = anyNSError()
+//
+//        expect(sut, toCompleteWith: deletionError, when: {
+//            store.completeDeletion(with: deletionError)
+//        })
+//    }
+//
+//    func test_save_failsOnInsertionError () {
+//        let (sut, store) = makeSUT()
+//        let insertionError = anyNSError()
+//
+//        expect(sut, toCompleteWith: insertionError, when: {
+//            store.completeDeletionSuccessfully()
+//            store.completeInsertion(with: insertionError)
+//        })
+//    }
+//
+//    func test_save_successedsOnSuccess () {
+//        let (sut, store) = makeSUT()
+//
+//        expect(sut, toCompleteWith: nil, when: {
+//            store.completeDeletionSuccessfully()
+//            store.completeInsertionSuccessfully()
+//        })
+//    }
+//
+//    func test_save_doesNotDeliverDeletionErrorAfterSUTInstanceHasBeenDeallocated() {
+//        let currentDate = Date()
+//        let store = FeedStoreSpy()
+//        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: { currentDate })
+//
+//        var recievedErrors = [LocalFeedLoader.SaveResult]()
+//        sut?.save(uniqueFeed().model, completion: { error in
+//            recievedErrors.append(error)
+//        })
+//
+//        sut = nil
+//        store.completeDeletion(with: anyNSError())
+//
+//        XCTAssertTrue(recievedErrors.isEmpty)
+//    }
+//
+//    func test_save_doesNotDeliverInsertionErrorAfterSUTInstanceHasBeenDeallocated() {
+//        let currentDate = Date()
+//        let store = FeedStoreSpy()
+//        var sut: LocalFeedLoader? = LocalFeedLoader(store: store, currentDate: { currentDate })
+//
+//        var recievedErrors = [LocalFeedLoader.SaveResult]()
+//        sut?.save(uniqueFeed().model, completion: { error in
+//            recievedErrors.append(error)
+//        })
+//
+//        store.completeDeletionSuccessfully()
+//        sut = nil
+//        store.completeInsertion(with: anyNSError())
+//
+//        XCTAssertTrue(recievedErrors.isEmpty)
+//    }
 
     // MARK: - Helpers
 
