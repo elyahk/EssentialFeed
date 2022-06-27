@@ -42,7 +42,9 @@ jobs:
 
       - name: Restore Code Coverage
         if: steps.cache-code-coverage.outputs.cache-hit != 'true'
-        run: cp xcov_output/report.json downloads
+        run: |
+          mkdir downloads
+          cp xcov_output/report.json downloads
 
       - name: Get Current Coverage Result
         id: coverage
