@@ -75,7 +75,7 @@ jobs:
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TRESHOLD_COVERAGE %"
           echo "Current test coverage: $CURRENT_COVERAGE %"
-          AVERAGE_COVERAGE=`echo|awk -v y1=$CURRENT_COVERAGE '{print y1+0.3}'`
+          AVERAGE_COVERAGE=`echo|awk -v y1=$CURRENT_COVERAGE '{print y1+0.003}'`
           if (( $(echo "$AVERAGE_COVERAGE $TRESHOLD_COVERAGE" | awk '{print ($1 >= $2)}') )); then
             echo "OK"
           else
