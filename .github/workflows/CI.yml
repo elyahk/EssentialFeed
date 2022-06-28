@@ -76,10 +76,19 @@ jobs:
           echo "Quaility Gate: checking test coverage is above threshold ..."
           echo "Threshold                     : $TRESHOLD_COVERAGE %"
           echo "Current test coverage: $CURRENT_COVERAGE %"
-          if (( $(echo "$CURRENT_COVERAGE $TRESHOLD_COVERAGE" | awk '{print ($1 >= $2)}') )); then
+          if (( $($CURRENT_COVERAGE >= $TRESHOLD_COVERAGE) )); then
             echo "OK"
           else
             echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
             echo "Failed"
             exit 1
           fi
+
+#          if (( $(echo "$CURRENT_COVERAGE $TRESHOLD_COVERAGE" | awk '{print ($1 >= $2)}') )); then
+#            echo "OK"
+#          else
+#            echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
+#            echo "Failed"
+#            exit 1
+#          fi
+
