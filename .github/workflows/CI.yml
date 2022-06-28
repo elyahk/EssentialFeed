@@ -67,7 +67,6 @@ jobs:
         run: |
           echo "Current: $CURRENT_COVERAGE"
           echo "Treshold: $TRESHOLD_COVERAGE"
-
       - name: Quality Gate - Test coverage shall be above threshold
         env:
           CURRENT_COVERAGE: ${{steps.coverage.outputs.prop}}
@@ -77,16 +76,6 @@ jobs:
           echo "Threshold                     : $TRESHOLD_COVERAGE %"
           echo "Current test coverage: $CURRENT_COVERAGE %"
           AVERAGE_COVERAGE=`echo|awk -v y1=$CURRENT_COVERAGE '{print y1+0.3}'`
-
-
-#          if (( $($AVERAGE_COVERAGE >= $($TRESHOLD_COVERAGE - 0.003)) )); then
-#            echo "OK"
-#          else
-#            echo "Current test coverage is below threshold. Please add more unit tests or adjust threshold to a lower value."
-#            echo "Failed"
-#            exit 1
-#          fi
-
           if (( $(echo "$AVERAGE_COVERAGE $TRESHOLD_COVERAGE" | awk '{print ($1 >= $2)}') )); then
             echo "OK"
           else
