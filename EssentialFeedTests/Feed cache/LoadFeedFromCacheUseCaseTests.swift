@@ -10,78 +10,78 @@ import XCTest
 import EssentialFeed
 
 class LoadFeedFromCacheUseCaseTests: XCTestCase {
-    func test_init_doesNotDeleteCacheUponCreation() {
-        let (_, store) = makeSUT()
+//    func test_init_doesNotDeleteCacheUponCreation() {
+//        let (_, store) = makeSUT()
+//
+//        XCTAssertEqual(store.recievedMessages, [])
+//    }
+//
+//    func test_load_requestCacheRetrieval() {
+//        let (sut, store) = makeSUT()
+//
+//        sut.load() { _ in }
+//
+//        XCTAssertEqual(store.recievedMessages, [.retrieve])
+//    }
+//
+//    func test_load_failsOnRetrievalError() {
+//        let (sut, store) = makeSUT()
+//        let retrievalError = anyNSError()
+//
+//        expect(sut, toCompleteWith: .failure(retrievalError), when: {
+//            store.completeRetrieval(with: retrievalError)
+//        })
+//    }
+//
+//    func test_load_deliversNoImagesOnEmptyCache() {
+//        let (sut, store) = makeSUT()
+//
+//        expect(sut, toCompleteWith: .success([]), when: {
+//            store.completeRetrievalWithEmptyCache()
+//        })
+//    }
+//
+//    func test_load_deliversImagesWithTimeStampOnNonEmptyCacheNonExpired() {
+//        let currentDate = Date()
+//        let (sut, store) = makeSUT(currentDate: { currentDate })
+//        let feed = uniqueFeed()
+//        let lessThanSevenDays = currentDate.adding(days: -7).adding(seconds: 1)
+//
+//        expect(sut, toCompleteWith: .success(feed.model), when: {
+//            store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDays)
+//        })
+//    }
 
-        XCTAssertEqual(store.recievedMessages, [])
-    }
-
-    func test_load_requestCacheRetrieval() {
-        let (sut, store) = makeSUT()
-
-        sut.load() { _ in }
-
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
-    }
-
-    func test_load_failsOnRetrievalError() {
-        let (sut, store) = makeSUT()
-        let retrievalError = anyNSError()
-
-        expect(sut, toCompleteWith: .failure(retrievalError), when: {
-            store.completeRetrieval(with: retrievalError)
-        })
-    }
-
-    func test_load_deliversNoImagesOnEmptyCache() {
-        let (sut, store) = makeSUT()
-
-        expect(sut, toCompleteWith: .success([]), when: {
-            store.completeRetrievalWithEmptyCache()
-        })
-    }
-
-    func test_load_deliversImagesWithTimeStampOnNonEmptyCacheNonExpired() {
-        let currentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { currentDate })
-        let feed = uniqueFeed()
-        let lessThanSevenDays = currentDate.adding(days: -7).adding(seconds: 1)
-
-        expect(sut, toCompleteWith: .success(feed.model), when: {
-            store.completeRetrieval(with: feed.local, timestamp: lessThanSevenDays)
-        })
-    }
-
-    func test_load_deliversNoImagesOnNonEmptyCacheExpiration() {
-        let currentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { currentDate })
-        let feed = uniqueFeed()
-        let sevenDaysOld = currentDate.adding(days: -7)
-
-        expect(sut, toCompleteWith: .success([]), when: {
-            store.completeRetrieval(with: feed.local, timestamp: sevenDaysOld)
-        })
-    }
-
-    func test_load_deliversNoImagesOnNonEmptyCacheExpired() {
-        let currentDate = Date()
-        let (sut, store) = makeSUT(currentDate: { currentDate })
-        let feed = uniqueFeed()
-        let moreThanSevenDaysOld = currentDate.adding(days: -7).adding(seconds: -1)
-
-        expect(sut, toCompleteWith: .success([]), when: {
-            store.completeRetrieval(with: feed.local, timestamp: moreThanSevenDaysOld)
-        })
-    }
-
-    func test_load_hasNoSideEffectsOnRetrievalError() {
-        let (sut, store) = makeSUT()
-
-        sut.load { _ in }
-        store.completeRetrieval(with: anyNSError())
-
-        XCTAssertEqual(store.recievedMessages, [.retrieve])
-    }
+//    func test_load_deliversNoImagesOnNonEmptyCacheExpiration() {
+//        let currentDate = Date()
+//        let (sut, store) = makeSUT(currentDate: { currentDate })
+//        let feed = uniqueFeed()
+//        let sevenDaysOld = currentDate.adding(days: -7)
+//
+//        expect(sut, toCompleteWith: .success([]), when: {
+//            store.completeRetrieval(with: feed.local, timestamp: sevenDaysOld)
+//        })
+//    }
+//
+//    func test_load_deliversNoImagesOnNonEmptyCacheExpired() {
+//        let currentDate = Date()
+//        let (sut, store) = makeSUT(currentDate: { currentDate })
+//        let feed = uniqueFeed()
+//        let moreThanSevenDaysOld = currentDate.adding(days: -7).adding(seconds: -1)
+//
+//        expect(sut, toCompleteWith: .success([]), when: {
+//            store.completeRetrieval(with: feed.local, timestamp: moreThanSevenDaysOld)
+//        })
+//    }
+//
+//    func test_load_hasNoSideEffectsOnRetrievalError() {
+//        let (sut, store) = makeSUT()
+//
+//        sut.load { _ in }
+//        store.completeRetrieval(with: anyNSError())
+//
+//        XCTAssertEqual(store.recievedMessages, [.retrieve])
+//    }
 
     func test_load_doesNotDeleteCacheOnEmptyCache() {
         let (sut, store) = makeSUT()
@@ -103,7 +103,7 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
 
         XCTAssertEqual(store.recievedMessages, [.retrieve])
     }
-
+//
     func test_load_deleteCacheOnSevenDaysOldCache() {
         let currentDate = Date()
         let (sut, store) = makeSUT(currentDate: { currentDate })

@@ -10,20 +10,20 @@ import XCTest
 import EssentialFeed
 
 class CacheFeedUseCaseTests: XCTestCase {
-//    func test_init_doesNotDeleteCacheUponCreation() {
-//        let (_, store) = makeSUT()
-//
-//        XCTAssertEqual(store.recievedMessages, [])
-//    }
-//
-//    func test_save_requestsDeleteCache() {
-//        let (sut, store) = makeSUT()
-//
-//        sut.save(uniqueFeed().model){ _ in }
-//
-//        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
-//    }
-//
+    func test_init_doesNotDeleteCacheUponCreation() {
+        let (_, store) = makeSUT()
+
+        XCTAssertEqual(store.recievedMessages, [])
+    }
+
+    func test_save_requestsDeleteCache() {
+        let (sut, store) = makeSUT()
+
+        sut.save(uniqueFeed().model){ _ in }
+
+        XCTAssertEqual(store.recievedMessages, [.deleteCacheFeed])
+    }
+
     func test_save_doesNotRequestInsertionOnDeletionError() {
         let (sut, store) = makeSUT()
         let deletionError = anyNSError()
