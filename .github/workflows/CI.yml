@@ -34,7 +34,7 @@ jobs:
         run: bundle exec fastlane mac code_coverage
 
   coverage:
-    runs-on: macos-latest:
+    runs-on: macos-latest
     needs: build-and-test-coverage
     steps:
       - name: Cache Code Coverage
