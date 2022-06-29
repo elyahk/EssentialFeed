@@ -33,10 +33,21 @@ jobs:
       - name: Generate Coverage
         run: bundle exec fastlane mac code_coverage
 
+      - name: Upload Xcov Output
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcov-output
+          path: xcov_output/report.json
+
   coverage:
     runs-on: macos-latest
     needs: build-and-test-coverage
     steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: xcov-output
+          path: xcov_output
+
       - name: Cache Code Coverage
         id: cache-code-coverage
         uses: actions/cache@v3
