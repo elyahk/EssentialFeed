@@ -99,7 +99,10 @@ jobs:
             echo "Failed"
             exit 1
           fi
-      - run: echo "${{steps.treshold-coverage.outputs.CURRENT_COVERAGE_PERCENTAGE}}"
+      - run: |
+          echo "${{steps.overall_coverage.env.CURRENT_COVERAGE}}"
+          echo "${{steps.overall_coverage.env.CURRENT_COVERAGE_PERCENTAGE}}"
+
       - name: Create Awesome Badge
         env:
           COVERAGE: ${{steps.overall_coverage.env.prop}}
