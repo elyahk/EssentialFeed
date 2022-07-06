@@ -110,5 +110,5 @@ jobs:
           gistID: 2694b798f5428b3bf416f42dcd33e4c0
           filename: test.json
           label: Test Coverage
-          message: ${{ $COVERAGE }}
+          message: ${{ COVERAGE }}
           color: orange
