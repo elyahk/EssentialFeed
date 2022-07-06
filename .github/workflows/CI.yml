@@ -98,4 +98,12 @@ jobs:
             echo "Failed"
             exit 1
           fi
-
+      - name: Create Awesome Badge
+        uses: schneegans/dynamic-badges-action@v1.4.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: 2694b798f5428b3bf416f42dcd33e4c0
+          filename: test.json
+          label: Hello
+          message: World
+          color: orange
