@@ -109,7 +109,7 @@ jobs:
           COVERAGE: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}}
         uses: schneegans/dynamic-badges-action@v1.4.0
         with:
-          auth: ${{secrets.GIST_TOKEN}}
+          auth: ${{secrets.GIST}}
           gistID: 2694b798f5428b3bf416f42dcd33e4c0
           filename: test.json
           label: Test Coverage
