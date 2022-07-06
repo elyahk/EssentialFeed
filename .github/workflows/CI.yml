@@ -1,6 +1,4 @@
 name: Coverage Diff
-env:
-  ARTIFACT_PATH: "downloads"
 
 on:
   push:
@@ -103,12 +101,12 @@ jobs:
           fi
       - name: Create Awesome Badge
         env:
-          COVERAGE: ${{ steps.overall_coverage.env.CURRENT_COVERAGE }}
+          COVERAGE: ${{steps.treshold-coverage.outputs.prop}}
         uses: schneegans/dynamic-badges-action@v1.4.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: 2694b798f5428b3bf416f42dcd33e4c0
           filename: test.json
           label: Test Coverage
-          message: ${{ COVERAGE }}
+          message: $COVERAGE
           color: orange
