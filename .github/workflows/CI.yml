@@ -104,6 +104,6 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: 2694b798f5428b3bf416f42dcd33e4c0
           filename: test.json
-          label: Hello
-          message: World
+          label: Salom
+          message: dunyo
           color: orange
