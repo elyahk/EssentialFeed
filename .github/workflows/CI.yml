@@ -22,6 +22,16 @@ jobs:
       - name: Install Cocoapods dependencies
         run: bundle exec pod install
 
+      - name: Add random file
+        run: echo test >> random.txt
+      - name: Add and commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: Your Name
+          author_email: mail@example.com
+          message: 'Your commit message'
+          add: '*.txt'
+
       - name: Test
         run: xcodebuild clean build test -workspace EssentialFeed.xcworkspace -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
@@ -114,21 +124,22 @@ jobs:
           label: "Code Coverage"
           status: "$COVERAGE"
           color: 'blue,555,daf'
-          path: .github/test-badge.svg
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      - name: Commit badge
-        env:
-          BADGE: ${{ steps.coverage.outputs.path }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add *.svg
-          git commit -m "Add/Update badge"
-      - name: Push badge commit
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.extract_branch.outputs.branch }}
+          path: ".github/test-badge.svg"
+
+#      - name: Extract branch name
+#        shell: bash
+#        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+#        id: extract_branch
+#      - name: Commit badge
+#        env:
+#          BADGE: ${{ steps.coverage.outputs.path }}
+#        run: |
+#          git config --local user.email "action@github.com"
+#          git config --local user.name "GitHub Action"
+#          git add *.svg
+#          git commit -m "Add/Update badge"
+#      - name: Push badge commit
+#        uses: ad-m/github-push-action@master
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          branch: ${{ steps.extract_branch.outputs.branch }}
