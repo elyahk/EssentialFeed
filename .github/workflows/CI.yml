@@ -112,9 +112,9 @@ jobs:
         uses: emibcn/badge-action@v1
         with:
           label: "Code Coverage"
-          status: $COVERAGE
+          status: ${COVERAGE}
           color: 'blue,555,daf'
-          path: $PATH
+          path: ${PATH}
       - name: Commit and push the badge (if it changed)
         uses: EndBug/add-and-commit@v9
         with:
