@@ -41,6 +41,7 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test-coverage
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v3
         with:
           name: xcov-output
