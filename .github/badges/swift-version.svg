@@ -1,20 +1,20 @@
-<svg width="52.9" height="20" viewBox="0 0 529 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="swift: 5">
-  <title>swift: 5</title>
+<svg width="63.9" height="20" viewBox="0 0 639 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="swift: 5.0">
+  <title>swift: 5.0</title>
   <linearGradient id="a" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="m"><rect width="529" height="200" rx="30" fill="#FFF"/></mask>
+  <mask id="m"><rect width="639" height="200" rx="30" fill="#FFF"/></mask>
   <g mask="url(#m)">
     <rect width="359" height="200" fill="#555"/>
-    <rect width="170" height="200" fill="#3C1" x="359"/>
-    <rect width="529" height="200" fill="url(#a)"/>
+    <rect width="280" height="200" fill="#3C1" x="359"/>
+    <rect width="639" height="200" fill="url(#a)"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="259" fill="#000" opacity="0.25">swift</text>
     <text x="50" y="138" textLength="259">swift</text>
-    <text x="414" y="148" textLength="70" fill="#000" opacity="0.25">5</text>
-    <text x="404" y="138" textLength="70">5</text>
+    <text x="414" y="148" textLength="180" fill="#000" opacity="0.25">5.0</text>
+    <text x="404" y="138" textLength="180">5.0</text>
   </g>
   
 </svg>
