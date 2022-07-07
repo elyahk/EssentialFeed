@@ -124,14 +124,23 @@ jobs:
 
       - name: Generate badge image with test coverage value
         env:
-          COVERAGE: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}}
           PATH: .github/test-badge.svg
         uses: emibcn/badge-action@v1
         with:
           label: "Code Coverage"
-          status: "$COVERAGE"
-          color: 'blue,555,daf'
-          path: ".github/test-badge.svg"
+          status: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}} %
+          color: ${{
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 90 && 'green'              ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 80 && 'yellow,green'       ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 70 && 'yellow'             ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 60 && 'orange,yellow'      ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 50 && 'orange'             ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 40 && 'red,orange'         ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 30 && 'red,red,orange'     ||
+          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 20 && 'red,red,red,orange' ||
+          'red' }}
+
+          path: .github/badges/coverage.svg
 
       - name: Commit Badge
         uses: EndBug/add-and-commit@v9
