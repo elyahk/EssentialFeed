@@ -23,7 +23,9 @@ jobs:
         run: bundle exec pod install
 
       - name: Add random file
-        run: echo test >> random.txt
+        run: |
+          echo test >> random.txt
+          echo ${{toJSON(github)}}
       - name: Add and commit
         uses: EndBug/add-and-commit@v9
         with:
