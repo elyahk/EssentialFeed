@@ -56,7 +56,6 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test-coverage
     steps:
-      steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
