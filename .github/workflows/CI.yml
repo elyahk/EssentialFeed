@@ -109,10 +109,8 @@ jobs:
           COVERAGE: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}}
           PATH: .github/badges/test-badge.svg
         uses: emibcn/badge-action@v1
-        id: badge
         with:
           label: "Code Coverage"
           status: ${{COVERAGE}}
           color: 'blue,555,daf'
-          label: Test Coverage
           path: ${{PATH}}
