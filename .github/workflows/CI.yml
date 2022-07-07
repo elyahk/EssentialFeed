@@ -104,14 +104,14 @@ jobs:
           echo "${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}} %"
           echo "${{steps.overall_coverage.env.CURRENT_COVERAGE_PERCENTAGE}}"
 
-      - name: Create Awesome Badge
+      - name: Generate badge image with test coverage value
         env:
           COVERAGE: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}}
-        uses: schneegans/dynamic-badges-action@v1.4.0
+        uses: emibcn/badge-action@v1
+        id: badge
         with:
-          auth: ${{secrets.GIST}}
-          gistID: 2694b798f5428b3bf416f42dcd33e4c0
-          filename: test.json
+          label: "Code Coverage"
+          status: ${{COVERAGE}}
+          color: 'blue,555,daf'
           label: Test Coverage
-          message: ${{ env.COVERAGE }} %
-          color: orange
+          path: .github/badges/test-badge.svg
