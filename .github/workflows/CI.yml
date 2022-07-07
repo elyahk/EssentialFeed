@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+#          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Select xcode
         run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
@@ -56,7 +56,10 @@ jobs:
     runs-on: macos-latest
     needs: build-and-test-coverage
     steps:
+      steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/download-artifact@v3
         with:
           name: xcov-output
@@ -130,6 +133,15 @@ jobs:
           status: "$COVERAGE"
           color: 'blue,555,daf'
           path: ".github/test-badge.svg"
+
+      - name: Commit Badge
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: Your Name
+          author_email: mail@example.com
+          message: 'Update badge'
+          add: '*.svg'
+          github_token: ${{github.token}}
 
 #      - name: Extract branch name
 #        shell: bash
