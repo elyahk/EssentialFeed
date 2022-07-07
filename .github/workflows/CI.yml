@@ -110,9 +110,8 @@ jobs:
           echo "${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}} %"
           echo "${{steps.overall_coverage.env.CURRENT_COVERAGE_PERCENTAGE}}"
 
-      - name: Generate badge image with test coverage value
+      - name: Generate Coverage badge
         env:
-          PATH: .github/test-badge.svg
         uses: emibcn/badge-action@v1
         with:
           label: "Code Coverage"
@@ -127,8 +126,22 @@ jobs:
             steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 30 && 'red,red,orange'     ||
             steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 20 && 'red,red,red,orange' ||
             'red' }}
-
           path: ".github/badges/coverage.svg"
+
+      - name: Generate iOS version
+        uses: emibcn/badge-action@v1
+        with:
+          label: iOS
+          status: 13.0+
+          color: 'green'
+          path: ".github/badges/ios-version.svg"
+      - name: Generate Swift version
+        uses: emibcn/badge-action@v1
+        with:
+          label: swift
+          status: 5.0
+          color: 'green'
+          path: ".github/badges/swift-version.svg"
 
       - name: Commit Badge
         uses: EndBug/add-and-commit@v9
