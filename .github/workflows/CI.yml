@@ -11,9 +11,10 @@ jobs:
   build-and-test-coverage:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Select xcode
         run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
