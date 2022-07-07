@@ -138,7 +138,7 @@ jobs:
         uses: emibcn/badge-action@v1
         with:
           label: swift
-          status: 5.0
+          status: "5.0"
           color: 'green'
           path: ".github/badges/swift-version.svg"
 
