@@ -11,7 +11,9 @@ jobs:
   build-and-test-coverage:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
 
       - name: Select xcode
         run: sudo xcode-select -switch /Applications/Xcode_13.1.0.app
@@ -25,7 +27,6 @@ jobs:
       - name: Add random file
         run: |
           echo test >> random.txt
-          echo ${{toJSON(github)}}
       - name: Add and commit
         uses: EndBug/add-and-commit@v9
         with:
