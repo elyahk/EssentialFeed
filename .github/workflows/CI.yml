@@ -111,7 +111,7 @@ jobs:
         id: badge
         with:
           label: "Code Coverage"
-          status: ${{COVERAGE}}
+          status: ${{$COVERAGE}}
           color: 'blue,555,daf'
           label: Test Coverage
-          path: .github/badges/test-badge.svg
+          path: ".github/badges/test-badge.svg"
