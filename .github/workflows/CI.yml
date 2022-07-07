@@ -128,7 +128,7 @@ jobs:
             steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 20 && 'red,red,red,orange' ||
             'red' }}
 
-          path: .github/badges/coverage.svg
+          path: ".github/coverage.svg"
 
       - name: Commit Badge
         uses: EndBug/add-and-commit@v9
