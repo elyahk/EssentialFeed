@@ -107,11 +107,12 @@ jobs:
       - name: Generate badge image with test coverage value
         env:
           COVERAGE: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}}
+          PATH: .github/badges/test-badge.svg
         uses: emibcn/badge-action@v1
         id: badge
         with:
           label: "Code Coverage"
-          status: ${{$COVERAGE}}
+          status: ${{COVERAGE}}
           color: 'blue,555,daf'
           label: Test Coverage
-          path: ".github/badges/test-badge.svg"
+          path: ${{PATH}}
