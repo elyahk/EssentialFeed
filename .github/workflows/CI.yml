@@ -111,7 +111,6 @@ jobs:
           echo "${{steps.overall_coverage.env.CURRENT_COVERAGE_PERCENTAGE}}"
 
       - name: Generate Coverage badge
-        env:
         uses: emibcn/badge-action@v1
         with:
           label: "Code Coverage"
