@@ -130,15 +130,15 @@ jobs:
           label: "Code Coverage"
           status: ${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}} %
           color: ${{
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 90 && 'green'              ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 80 && 'yellow,green'       ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 70 && 'yellow'             ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 60 && 'orange,yellow'      ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 50 && 'orange'             ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 40 && 'red,orange'         ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 30 && 'red,red,orange'     ||
-          steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 20 && 'red,red,red,orange' ||
-          'red' }}
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 90 && 'green'              ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 80 && 'yellow,green'       ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 70 && 'yellow'             ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 60 && 'orange,yellow'      ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 50 && 'orange'             ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 40 && 'red,orange'         ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 30 && 'red,red,orange'     ||
+            steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE > 20 && 'red,red,red,orange' ||
+            'red' }}
 
           path: .github/badges/coverage.svg
 
