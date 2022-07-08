@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: main
       - uses: actions/download-artifact@v3
         with:
           name: xcov-output
