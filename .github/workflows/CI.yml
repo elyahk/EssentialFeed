@@ -109,7 +109,6 @@ jobs:
       - run: |
           echo "${{steps.overall_coverage.outputs.TRESHOLD_COVERAGE_PERCENTAGE}} %"
           echo "${{steps.overall_coverage.env.CURRENT_COVERAGE_PERCENTAGE}}"
-
       - name: Generate Coverage badge
         uses: emibcn/badge-action@v1
         with:
@@ -134,6 +133,20 @@ jobs:
           status: 13.0+
           color: 'green'
           path: ".github/badges/ios-version.svg"
+      - name: Generate macOS version
+        uses: emibcn/badge-action@v1
+        with:
+          label: macOS
+          status: 12.3
+          color: 'green'
+          path: ".github/badges/macos-version.svg"
+      - name: Generate Xcode version
+        uses: emibcn/badge-action@v1
+        with:
+          label: Xcode
+          status: 12.4
+          color: 'green'
+          path: ".github/badges/xcode-version.svg"
       - name: Generate Swift version
         uses: emibcn/badge-action@v1
         with:
