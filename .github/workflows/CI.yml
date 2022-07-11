@@ -97,7 +97,8 @@ jobs:
           TRESHOLD_COVERAGE_PERCENTAGE=`echo|awk -v y1=$TRESHOLD_COVERAGE '{print y1*100}'`
           echo "Threshold                     : $TRESHOLD_COVERAGE_PERCENTAGE %"
           echo "Current test coverage         : $CURRENT_COVERAGE_PERCENTAGE %"
-          echo "::set-output name=TRESHOLD_COVERAGE_PERCENTAGE::$TRESHOLD_COVERAGE_PERCENTAGE"
+          printf -v TRESHOLD_COVERAGE_ "%0.1f" $TRESHOLD_COVERAGE_PERCENTAGE
+          echo "::set-output name=TRESHOLD_COVERAGE_PERCENTAGE::$TRESHOLD_COVERAGE_"
           MAX_COVERAGE_PERCENTAGE=`echo|awk -v y1=$CURRENT_COVERAGE_PERCENTAGE '{print y1+0.1}'`
           if (( $(echo "$MAX_COVERAGE_PERCENTAGE $TRESHOLD_COVERAGE_PERCENTAGE" | awk '{print ($1 >= $2)}') )); then
             echo "OK"
