@@ -63,6 +63,7 @@ jobs:
         if: steps.cache-code-coverage.outputs.cache-hit != 'true'
         run: |
           mkdir downloads
+          ls -a xcov_output
           cp xcov_output/report.json downloads
 
       - name: Get Current Coverage Result
