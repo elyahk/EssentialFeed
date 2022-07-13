@@ -27,7 +27,8 @@ platform :mac do
       only_project_targets: true,
       output_directory: "xcov_output",
       minimum_coverage_percentage: 29.0,
-      json_report: true
+      json_report: true,
+      html_report: true
     )
   end
 end
