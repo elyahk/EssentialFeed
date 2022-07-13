@@ -138,21 +138,21 @@ jobs:
         uses: emibcn/badge-action@v1
         with:
           label: macOS
-          status: 12.3
+          status: 12.3+
           color: 'green'
           path: ".github/badges/macos-version.svg"
       - name: Generate Xcode version
         uses: emibcn/badge-action@v1
         with:
           label: Xcode
-          status: 12.4
+          status: 12.4+
           color: 'green'
           path: ".github/badges/xcode-version.svg"
       - name: Generate Swift version
         uses: emibcn/badge-action@v1
         with:
           label: swift
-          status: "5.0"
+          status: "5.0+"
           color: 'green'
           path: ".github/badges/swift-version.svg"
 
