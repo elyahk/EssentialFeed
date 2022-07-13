@@ -1,20 +1,20 @@
-<svg width="84.5" height="20" viewBox="0 0 845 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="macOS: 12.3">
-  <title>macOS: 12.3</title>
+<svg width="93.5" height="20" viewBox="0 0 935 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="macOS: 12.3+">
+  <title>macOS: 12.3+</title>
   <linearGradient id="a" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="m"><rect width="845" height="200" rx="30" fill="#FFF"/></mask>
+  <mask id="m"><rect width="935" height="200" rx="30" fill="#FFF"/></mask>
   <g mask="url(#m)">
     <rect width="495" height="200" fill="#555"/>
-    <rect width="350" height="200" fill="#3C1" x="495"/>
-    <rect width="845" height="200" fill="url(#a)"/>
+    <rect width="440" height="200" fill="#3C1" x="495"/>
+    <rect width="935" height="200" fill="url(#a)"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="395" fill="#000" opacity="0.25">macOS</text>
     <text x="50" y="138" textLength="395">macOS</text>
-    <text x="550" y="148" textLength="250" fill="#000" opacity="0.25">12.3</text>
-    <text x="540" y="138" textLength="250">12.3</text>
+    <text x="550" y="148" textLength="340" fill="#000" opacity="0.25">12.3+</text>
+    <text x="540" y="138" textLength="340">12.3+</text>
   </g>
   
 </svg>
